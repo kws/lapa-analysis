@@ -1,0 +1,10 @@
+xlrd
+xlwt
+unidecode
+unicodedata
+logging
+unittest
+xml
+csv
+json
+argparse
