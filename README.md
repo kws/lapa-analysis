@@ -1,5 +1,5 @@
-# SOPA
-## project
+# SOPA. A Digital Tool for the Analysis of Sound Patterns in Historical Dutch Theater Plays 
+## Title
 How can we analyze sound patterns of historical Dutch theatre? What can we learn about early modern Dutch language and culture by looking at sound patterns? The research for which this tool, called SOPA (Sound Patterns Analyzer), is designed, has a stylometric character. It aims to characterize historical Dutch theater plays (1570-1800) on the basis of sound analysis. The sounds of early modern theater were pre-eminently intended to splash out loud from a stage, at a time when important cultural developments took place in literary movements and in the way in which language was thought of.
 
 By analyzing sound patterns using SOPA, I follow in the footsteps of research in the field of (computational) sound research, quantitative analysis of cultural trends, text mining, sound classification and stylometric identification of plays, publishers and authors.
