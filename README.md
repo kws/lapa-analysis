@@ -1,7 +1,7 @@
 # LAPA. A Digital Tool for the Analysis of Language Sound Patterns in Historical Dutch Theatre Plays 
 ## Title
 
-LAPA allows for converting digitized early modern Dutch theatre plays into phonetic script (SAMPA). To achieve this, a ruleset has been created that codifies the transliteration to SAMPA. This codebase contains parsers for the rule sets (xls format), parsers for the digitized texts (naf xml) and logic to perform counts and correlations.
+LAPA allows for converting digitised early modern Dutch theatre plays into (presumed) phonetic script (SAMPA). To achieve this, a ruleset has been created that codifies the transliteration to SAMPA. This codebase contains parsers for the rule sets (xls format), parsers for the digitised texts (naf xml) and logic to perform counts and correlations.
 
 ## File structure
 ```bash
