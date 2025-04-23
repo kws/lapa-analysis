@@ -1,37 +1,96 @@
-# LAPA: Language Pattern Analyser. A Digital Tool for the Analysis of Patterns in Spelled Language Sounds in Historical Dutch Theatre Plays 
-## Title
+# LAPA: Language Pattern Analyser
+
+A Digital Tool for the Analysis of Patterns in Spelled Language Sounds in Historical Dutch Theatre Plays.
 
 LAPA allows for converting digitised early modern Dutch theatre plays into (presumed) phonetic script (SAMPA). To achieve this, a ruleset has been created that codifies the transliteration to SAMPA. This codebase contains parsers for the rule sets (xls format), parsers for the digitised texts (naf xml) and logic to perform counts and correlations.
 
-## File structure
-```bash
-|__ classes:             all business logic related to parsing the dictionary and litterature text, 
-|     |                  executing phoenetic translitteration (in SAMPA) and performing tallying across multiple
-|     |                  dimensions.
-|     |
-|     |__ counter.py:    classes to count emotions and sampa characters. Consists of simple mappings, getters and 
-|     |                  setters.
-|     |__ sampify.py:    classes to parse (and load) the smapa translitteration dictionary (excel) and operate as
-|     |                  a translitteration engine once rules are loaded.
-|     |__ naf.py:        classes to parse the naf xml file. These classes are very specific for the file format;
-|     |                  it assumes a fixed xml structure, including word, lemma and emotions. 
-|     |                  Once the file is parsed, translation to sampa and tallying is executed.
-|     |__ tests.py:      Tests tot assert all classes work as designed against real-life scenario
-|     |__ test_static:   Files used in the tests
-|
-|__ validate_cli.py:     helper tool to validate the quality of a dictionary file. 
-|                        Provided with a reference translation file, it will assert translations against expected 
-|                        translation and generate a report file.
-|__ sampify_cli.py:      cli tool to generate excel with counts, given naf.xml and rules.xls.
+## Installation
 
+This project uses [Poetry](https://python-poetry.org/) for dependency management. To get started:
+
+1. Install Poetry (if you haven't already):
+
+   ```bash
+   curl -sSL https://install.python-poetry.org | python3 -
+   ```
+
+2. Clone the repository and install dependencies:
+
+   ```bash
+   git clone <repository-url>
+   cd lapa-analysis
+   poetry install
+   ```
+
+3. Activate the virtual environment:
+
+   ```bash
+   poetry shell
+   ```
+
+Alternatively, you can run commands directly using `poetry run`:
+
+```bash
+poetry run python -m lapa_classic --help
 ```
 
-## Running the code
-The following command will produce an excel output file with counts per sampa sound, as well as a set of debug and warning log files.
+## File Structure
 
 ```bash
->> python3 sampify.py --naf '/path/to/naf.xml' --rules '/path/to/rules.xls' --output '/path/to/write/outputs'
+.
+├── fixtures/             # Sample files for testing and CLI runs
+├── lapa_classic/         # Core business logic for parsing and processing
+│   ├── counter.py        # Classes to count emotions and sampa characters
+│   ├── sampify.py        # Classes to parse and load the sampa transliteration dictionary
+│   ├── naf.py            # Classes to parse the naf xml file
+│   ├── _cli.py           # Command-line interface
+│   ├── __init__.py       # Package initialization
+│   └── __main__.py       # Package entry point
+│
+├── tests/                # Test suite
+│   └── test_classic.py   # Tests for lapa_classic functionality
+│
+└── lapa_ng/             # Next generation version of LAPA (under development)
 ```
 
-## Sample files
-A sample naf xml and rule excel are provided in the folder `sources`.
+## Usage
+
+The code provides two main commands through the CLI interface:
+
+### Processing NAF files (sampify)
+
+Process a NAF file using the specified rules to generate counts and translations:
+
+```bash
+python -m lapa_classic sampify -n '/path/to/naf.xml' -r '/path/to/rules.xls' -o '/path/to/output'
+```
+
+This will produce:
+
+- An Excel file with counts per sampa sound
+- A CSV file with translations
+- Debug and warning log files
+
+### Validating rules (validate)
+
+Validate a rules file against a reference translation:
+
+```bash
+python -m lapa_classic validate -r '/path/to/rules.xls' -t '/path/to/test.txt' -o '/path/to/output'
+```
+
+This will generate a validation report showing any discrepancies between the rules and expected translations.
+
+### Getting Help
+
+You can get help for any command by adding `--help`:
+
+```bash
+python -m lapa_classic --help
+python -m lapa_classic sampify --help
+python -m lapa_classic validate --help
+```
+
+## Sample Files
+
+Sample NAF XML and rules files are provided in the `fixtures` directory for testing and reference.

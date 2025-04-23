@@ -4,8 +4,8 @@ Created on Wed Feb  8 19:35:27 2017
 @author: ruben
 """
 import logging
-from classes.counter import countSampa
-from classes.counter import countEmotions
+from .counter import countSampa
+from .counter import countEmotions
 
 class naf:
     def __init__(self,f,th=0.5):

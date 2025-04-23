@@ -1,8 +1,11 @@
-from counter import *
-from sampify_cli import *
-from naf import *
+from lapa_classic.counter import countSampa
+from lapa_classic.sampify import Sampify
+from lapa_classic.naf import naf
 import unittest 
 from pathlib import Path
+
+TEST_ROOT = Path(__file__).parent
+FIXTURES_ROOT = TEST_ROOT.parent / "fixtures"
 
 
 class TestCount(unittest.TestCase):
@@ -54,8 +57,8 @@ class compare:
 
 class TestNaf(unittest.TestCase):
     def setUp(self):
-        self.n = naf(str(Path(__file__).parent) +  "/test_static/lope001dull01_01.xml",0)
-        self.a = Sampify(str(Path(__file__).parent) + "/test_static/RULES_A_V1.5.xls")
+        self.n = naf((FIXTURES_ROOT / "lope001dull01_01.xml"), 0)
+        self.a = Sampify((FIXTURES_ROOT / "RULES_A_V1.5.xls").as_posix())
         self.n.translate(self.a)
     def tearDown(self):
         del self.n
