@@ -10,11 +10,11 @@ Smitskamp, Fieke. (2024). From Ah! to Little Z: Clustering Spelled Language Soun
 
 To test the interactive notebooks, you can simply click the badge below:
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/kws/lapa-analysis/HEAD?urlpath=%2Fdoc%2Ftree%2Fnotebooks%2Findex.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/kws/lapa-analysis/HEAD?urlpath=lab/tree/notebooks/index.ipynb)
 
 or open this URL in your browser:
 
-https://mybinder.org/v2/gh/kws/lapa-analysis/HEAD?urlpath=%2Fdoc%2Ftree%2Fnotebooks%2Findex.ipynb
+https://mybinder.org/v2/gh/kws/lapa-analysis/HEAD?urlpath=lab/tree/notebooks/index.ipynb
 
 ## Installation
 
