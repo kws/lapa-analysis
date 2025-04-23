@@ -4,9 +4,7 @@ from lapa_classic.naf import naf
 import unittest 
 from pathlib import Path
 
-TEST_ROOT = Path(__file__).parent
-FIXTURES_ROOT = TEST_ROOT.parent / "fixtures"
-
+from .conftest import FIXTURES_ROOT
 
 class TestCount(unittest.TestCase):
 
