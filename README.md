@@ -8,6 +8,14 @@ The motivation for this project can be found in the following publication:
 
 Smitskamp, Fieke. (2024). From Ah! to Little Z: Clustering Spelled Language Sounds in Early Modern Dutch Theatre Plays (1570-1800). BMGN - Low Countries Historical Review, 139, 7-31. https://doi.org/10.51769/bmgn-lchr.13868
 
+To test the interactive notebooks, you can simply click the badge below:
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/kws/lapa-analysis/HEAD?urlpath=%2Fdoc%2Ftree%2Fnotebooks%2Findex.ipynb)
+
+or open this URL in your browser:
+
+https://mybinder.org/v2/gh/kws/lapa-analysis/HEAD?urlpath=%2Fdoc%2Ftree%2Fnotebooks%2Findex.ipynb
+
 ## Installation
 
 This project uses [Poetry](https://python-poetry.org/) for dependency management. To get started:

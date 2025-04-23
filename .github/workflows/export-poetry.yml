@@ -26,6 +26,7 @@ jobs:
       - name: Export requirements.txt
         run: |
           poetry export -f requirements.txt --without-hashes -o requirements.txt
+          echo "-e ." >> requirements.txt
 
       - name: Commit and push requirements.txt if changed
         run: |
