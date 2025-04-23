@@ -15,6 +15,24 @@ The core of LAPA-NG is its rule-based matching system that converts written text
 
    Core matching functionality for phonetic transcription.
 
+   .. py:class:: MatchResult
+
+      Result of a successful rule match.
+
+      :param str word: Original word being matched
+      :param int start: Starting position of the match
+      :param str matched: The substring that was matched
+      :param str phonemes: Phonetic transcription for the matched substring
+      :param str remainder: Remaining part of the word after the match
+
+   .. py:class:: ContextualMatchResult
+
+      Enhanced match result including rule information.
+
+      :param MatchResult match_result: The basic match result
+      :param str rule_id: Identifier of the rule that matched
+      :param tuple[str, ...] rules_attempted: Tuple of rule IDs that were attempted before finding a match
+
    .. py:class:: Matcher(Protocol)
 
       Protocol defining the interface for rule matchers.
@@ -27,15 +45,50 @@ The core of LAPA-NG is its rule-based matching system that converts written text
          :param int start: Starting position in the word
          :return: MatchResult if successful, None otherwise
 
-   .. py:class:: MatchResult
+      .. py:property:: id -> str
 
-      Result of a successful rule match.
+         Return the unique identifier for this matcher.
 
-      :param str word: Original word being matched
-      :param int start: Starting position of the match
-      :param str matched: The substring that was matched
-      :param str phonemes: Phonetic transcription for the matched substring
-      :param str remainder: Remaining part of the word after the match
+   .. py:class:: RuleListMatcher(Matcher)
+
+      A matcher that attempts to match a word against a list of rules in sequence.
+
+      :param list[Matcher] rules: List of matchers to try in sequence
+
+   .. py:function:: translate(word: str, part_matcher: Matcher) -> Generator[ContextualMatchResult, None, None]
+
+      Translate a word into phonemes using the given matcher.
+
+      This function attempts to match the entire word against the rules and yields
+      a ContextualMatchResult for each match found. If no rule matches a character,
+      it yields a 'silent' match with empty phonemes.
+
+      :param str word: The word to translate
+      :param Matcher part_matcher: The matcher to use for rule matching
+      :return: Generator yielding ContextualMatchResult for each match or non-match
+
+   .. py:class:: CachedTranslator
+
+      A translator that caches results to improve performance.
+
+      :param callable translate_func: The function to use for translation
+      :param int cache_size: Maximum number of translations to cache (default: 10,000)
+
+      .. py:method:: translate(word: str, translator: Matcher) -> Generator[ContextualMatchResult, None, None]
+
+         Translate a word using the cached translator.
+
+         :param str word: The word to translate
+         :param Matcher translator: The matcher to use for rule matching
+         :return: Generator yielding ContextualMatchResult for each match
+
+      .. py:method:: __call__(word: str, translator: Matcher) -> Generator[ContextualMatchResult, None, None]
+
+         Allow the translator to be called as a function.
+
+         :param str word: The word to translate
+         :param Matcher translator: The matcher to use for rule matching
+         :return: Generator yielding ContextualMatchResult for each match
 
 Rule Tables
 ~~~~~~~~~~
@@ -66,11 +119,20 @@ Rules can be loaded from Excel spreadsheets or CSV files.
 Regex Rules
 ~~~~~~~~~~
 
-Rules can be defined using regular expressions for flexible pattern matching.
+Rules can be defined using regular expressions for flexible pattern matching, with support for character classes and YAML-based rule specifications.
 
 .. py:module:: lapa_ng.rules_regex.rules
 
    Regular expression based rule specifications.
+
+   .. py:class:: RegexRuleSpec
+
+      Specification for a regular expression based rule.
+
+      :param str id: Unique identifier for the rule
+      :param re.Pattern pattern: Compiled regular expression pattern
+      :param str replacement: Phonetic replacement string
+      :param dict[str, Any] meta: Additional metadata about the rule
 
    .. py:class:: RegexMatcher(Matcher)
 
@@ -79,14 +141,33 @@ Rules can be defined using regular expressions for flexible pattern matching.
       :param str id: Unique identifier for the matcher
       :param str rule: Regular expression pattern
       :param str replacement: Phonetic replacement string
-      :param dict meta: Additional metadata
+      :param dict[str, Any] meta: Optional metadata about the rule
+
+      The matcher supports the following character classes:
+      - ``[:vowel:]`` - Matches any vowel (aeiouy)
+      - ``[:consonant:]`` - Matches any consonant (bcdfghjklmnpqrstvwxz)
+      - ``[:digit:]`` - Matches any digit (0123456789)
+      - ``[:punctuation:]`` - Matches punctuation (.,!?:;)
+
+      Rules starting with ``^`` are treated as prefix rules and only match at the start of words.
+      Rules must contain a capturing group ``(pattern)`` to specify which part of the match to replace.
 
    .. py:function:: load_matchers(rule_file: str | Path) -> tuple[RegexMatcher, ...]
 
-      Load regex matchers from a rule file.
+      Load regex matchers from a YAML file containing rule specifications.
 
-      :param rule_file: Path to rule specification file
+      :param rule_file: Path to YAML file containing rule specifications
       :return: Tuple of RegexMatcher objects
+
+      Example YAML format:
+
+      .. code-block:: yaml
+
+         - id: "rule1"
+           pattern: "^([:vowel:]+)"
+           replacement: "V"
+           meta:
+             description: "Match initial vowels"
 
 Text Processing
 -------------
@@ -94,18 +175,39 @@ Text Processing
 NAF Processing
 ~~~~~~~~~~~~~
 
-Text can be read from NAF (NLP Annotation Format) XML files.
+Text can be read from NAF (NLP Annotation Format) XML files using a streaming parser.
 
 .. py:module:: lapa_ng.naf
 
    NAF file processing functionality.
 
-   .. py:function:: read_naf(naf_file: str | Path) -> str
+   .. py:class:: WordForm
 
-      Read text content from a NAF XML file.
+      Represents a word form element from a NAF file.
 
-      :param naf_file: Path to NAF XML file
-      :return: Extracted text content
+      :param str text: The text content of the word form
+      :param dict[str, str] attributes: Dictionary of XML attributes associated with the word form
+
+   .. py:function:: parse_naf(naf_file: str) -> Generator[WordForm, None, None]
+
+      Parse a NAF file and yield WordForm objects.
+
+      This function uses a streaming XML parser to efficiently process large NAF files.
+      It yields WordForm objects for each word form element found in the text section.
+
+      :param naf_file: Path to the NAF file to parse
+      :return: Generator yielding WordForm objects
+
+      Example Usage:
+
+      .. code-block:: python
+
+         from lapa_ng.naf import parse_naf
+
+         # Process a NAF file efficiently
+         for word_form in parse_naf("example.naf"):
+             print(f"Text: {word_form.text}")
+             print(f"Attributes: {word_form.attributes}")
 
 Text Cleaning
 ~~~~~~~~~~~~
