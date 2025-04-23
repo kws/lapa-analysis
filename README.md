@@ -4,6 +4,10 @@ A Digital Tool for the Analysis of Patterns in Spelled Language Sounds in Histor
 
 LAPA allows for converting digitised early modern Dutch theatre plays into (presumed) phonetic script (SAMPA). To achieve this, a ruleset has been created that codifies the transliteration to SAMPA. This codebase contains parsers for the rule sets (xls format), parsers for the digitised texts (naf xml) and logic to perform counts and correlations.
 
+The motivation for this project can be found in the following publication:
+
+Smitskamp, Fieke. (2024). From Ah! to Little Z: Clustering Spelled Language Sounds in Early Modern Dutch Theatre Plays (1570-1800). BMGN - Low Countries Historical Review, 139, 7-31. https://doi.org/10.51769/bmgn-lchr.13868
+
 ## Installation
 
 This project uses [Poetry](https://python-poetry.org/) for dependency management. To get started:
@@ -52,6 +56,10 @@ poetry run python -m lapa_classic --help
 │
 └── lapa_ng/             # Next generation version of LAPA (under development)
 ```
+
+## Code Documentation
+
+The code documentation can be found in the `docs` directory or browsed on [https://kws.github.io/lapa-analysis/](https://kws.github.io/lapa-analysis/).
 
 ## Usage
 
