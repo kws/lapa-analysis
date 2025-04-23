@@ -1,0 +1,360 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Reference &mdash; LAPA-NG  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Usage" href="usage.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            LAPA-NG
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#core-components">Core Components</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#rules-and-matchers">Rules and Matchers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.rules.matchers.Matcher"><code class="docutils literal notranslate"><span class="pre">Matcher</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.rules.matchers.MatchResult"><code class="docutils literal notranslate"><span class="pre">MatchResult</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#rule-tables">Rule Tables</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.rules_table.table.read_excel"><code class="docutils literal notranslate"><span class="pre">read_excel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.rules_table.table.read_csv"><code class="docutils literal notranslate"><span class="pre">read_csv()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#regex-rules">Regex Rules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.rules_regex.rules.RegexMatcher"><code class="docutils literal notranslate"><span class="pre">RegexMatcher</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.rules_regex.rules.load_matchers"><code class="docutils literal notranslate"><span class="pre">load_matchers()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#text-processing">Text Processing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#naf-processing">NAF Processing</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.naf.read_naf"><code class="docutils literal notranslate"><span class="pre">read_naf()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#text-cleaning">Text Cleaning</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.pipeline.clean.create_pipeline"><code class="docutils literal notranslate"><span class="pre">create_pipeline()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.pipeline.clean.ensure_text"><code class="docutils literal notranslate"><span class="pre">ensure_text()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.pipeline.clean.strip_spaces"><code class="docutils literal notranslate"><span class="pre">strip_spaces()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.pipeline.clean.to_lowercase"><code class="docutils literal notranslate"><span class="pre">to_lowercase()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.pipeline.clean.strip_accents"><code class="docutils literal notranslate"><span class="pre">strip_accents()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LAPA-NG</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">API Reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h1>
+<p>This page provides detailed documentation for the LAPA-NG Python API, a system for phonetic transcription of Dutch text using rule-based pattern matching.</p>
+<section id="core-components">
+<h2>Core Components<a class="headerlink" href="#core-components" title="Link to this heading"></a></h2>
+<section id="rules-and-matchers">
+<h3>Rules and Matchers<a class="headerlink" href="#rules-and-matchers" title="Link to this heading"></a></h3>
+<p>The core of LAPA-NG is its rule-based matching system that converts written text into phonetic sounds.</p>
+<p id="module-lapa_ng.rules.matchers">Core matching functionality for phonetic transcription.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="lapa_ng.rules.matchers.Matcher">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lapa_ng.rules.matchers.</span></span><span class="sig-name descname"><span class="pre">Matcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Protocol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lapa_ng.rules.matchers.Matcher" title="Link to this definition"></a></dt>
+<dd><p>Protocol defining the interface for rule matchers.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="lapa_ng.rules.matchers.Matcher.match">
+<span class="sig-name descname"><span class="pre">match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#lapa_ng.rules.matchers.MatchResult" title="lapa_ng.rules.matchers.MatchResult"><span class="pre">MatchResult</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#lapa_ng.rules.matchers.Matcher.match" title="Link to this definition"></a></dt>
+<dd><p>Match a substring of a word against a specific rule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>word</strong> (<em>str</em>) – The word to match against</p></li>
+<li><p><strong>start</strong> (<em>int</em>) – Starting position in the word</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>MatchResult if successful, None otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lapa_ng.rules.matchers.MatchResult">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lapa_ng.rules.matchers.</span></span><span class="sig-name descname"><span class="pre">MatchResult</span></span><a class="headerlink" href="#lapa_ng.rules.matchers.MatchResult" title="Link to this definition"></a></dt>
+<dd><p>Result of a successful rule match.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>word</strong> (<em>str</em>) – Original word being matched</p></li>
+<li><p><strong>start</strong> (<em>int</em>) – Starting position of the match</p></li>
+<li><p><strong>matched</strong> (<em>str</em>) – The substring that was matched</p></li>
+<li><p><strong>phonemes</strong> (<em>str</em>) – Phonetic transcription for the matched substring</p></li>
+<li><p><strong>remainder</strong> (<em>str</em>) – Remaining part of the word after the match</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="rule-tables">
+<h3>Rule Tables<a class="headerlink" href="#rule-tables" title="Link to this heading"></a></h3>
+<p>Rules can be loaded from Excel spreadsheets or CSV files.</p>
+<p id="module-lapa_ng.rules_table.table">Table-based rule processing functionality.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="lapa_ng.rules_table.table.read_excel">
+<span class="sig-prename descclassname"><span class="pre">lapa_ng.rules_table.table.</span></span><span class="sig-name descname"><span class="pre">read_excel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sheet_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">TabularRule</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#lapa_ng.rules_table.table.read_excel" title="Link to this definition"></a></dt>
+<dd><p>Read rules from an Excel file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_path</strong> – Path to Excel file</p></li>
+<li><p><strong>sheet_name</strong> – Name or index of sheet to read</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of TabularRule objects</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lapa_ng.rules_table.table.read_csv">
+<span class="sig-prename descclassname"><span class="pre">lapa_ng.rules_table.table.</span></span><span class="sig-name descname"><span class="pre">read_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_separator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">','</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skiprows</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">TabularRule</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#lapa_ng.rules_table.table.read_csv" title="Link to this definition"></a></dt>
+<dd><p>Read rules from a CSV file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_path</strong> – Path to CSV file</p></li>
+<li><p><strong>field_separator</strong> – Character used to separate fields</p></li>
+<li><p><strong>skiprows</strong> – Number of rows to skip at the start</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of TabularRule objects</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="regex-rules">
+<h3>Regex Rules<a class="headerlink" href="#regex-rules" title="Link to this heading"></a></h3>
+<p>Rules can be defined using regular expressions for flexible pattern matching.</p>
+<p id="module-lapa_ng.rules_regex.rules">Regular expression based rule specifications.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="lapa_ng.rules_regex.rules.RegexMatcher">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lapa_ng.rules_regex.rules.</span></span><span class="sig-name descname"><span class="pre">RegexMatcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matcher</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lapa_ng.rules_regex.rules.RegexMatcher" title="Link to this definition"></a></dt>
+<dd><p>A matcher that uses regular expressions for pattern matching.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>str</em>) – Unique identifier for the matcher</p></li>
+<li><p><strong>rule</strong> (<em>str</em>) – Regular expression pattern</p></li>
+<li><p><strong>replacement</strong> (<em>str</em>) – Phonetic replacement string</p></li>
+<li><p><strong>meta</strong> (<em>dict</em>) – Additional metadata</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lapa_ng.rules_regex.rules.load_matchers">
+<span class="sig-prename descclassname"><span class="pre">lapa_ng.rules_regex.rules.</span></span><span class="sig-name descname"><span class="pre">load_matchers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rule_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#lapa_ng.rules_regex.rules.RegexMatcher" title="lapa_ng.rules_regex.rules.RegexMatcher"><span class="pre">RegexMatcher</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#lapa_ng.rules_regex.rules.load_matchers" title="Link to this definition"></a></dt>
+<dd><p>Load regex matchers from a rule file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rule_file</strong> – Path to rule specification file</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple of RegexMatcher objects</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="text-processing">
+<h2>Text Processing<a class="headerlink" href="#text-processing" title="Link to this heading"></a></h2>
+<section id="naf-processing">
+<h3>NAF Processing<a class="headerlink" href="#naf-processing" title="Link to this heading"></a></h3>
+<p>Text can be read from NAF (NLP Annotation Format) XML files.</p>
+<p id="module-lapa_ng.naf">NAF file processing functionality.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="lapa_ng.naf.read_naf">
+<span class="sig-prename descclassname"><span class="pre">lapa_ng.naf.</span></span><span class="sig-name descname"><span class="pre">read_naf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">naf_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#lapa_ng.naf.read_naf" title="Link to this definition"></a></dt>
+<dd><p>Read text content from a NAF XML file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>naf_file</strong> – Path to NAF XML file</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Extracted text content</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="text-cleaning">
+<h3>Text Cleaning<a class="headerlink" href="#text-cleaning" title="Link to this heading"></a></h3>
+<p>Text can be cleaned prior to phonetic transcription using a configurable pipeline.</p>
+<p id="module-lapa_ng.pipeline.clean">Text cleaning pipeline functionality.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="lapa_ng.pipeline.clean.create_pipeline">
+<span class="sig-prename descclassname"><span class="pre">lapa_ng.pipeline.clean.</span></span><span class="sig-name descname"><span class="pre">create_pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">functions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">callable</span></span></span><a class="headerlink" href="#lapa_ng.pipeline.clean.create_pipeline" title="Link to this definition"></a></dt>
+<dd><p>Create a text cleaning pipeline from a sequence of cleaning functions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>functions</strong> – One or more cleaning functions to apply in sequence</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Combined cleaning function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Available Cleaners:</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="lapa_ng.pipeline.clean.ensure_text">
+<span class="sig-prename descclassname"><span class="pre">lapa_ng.pipeline.clean.</span></span><span class="sig-name descname"><span class="pre">ensure_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/lapa_ng/pipeline/clean.html#ensure_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lapa_ng.pipeline.clean.ensure_text" title="Link to this definition"></a></dt>
+<dd><p>Ensure that the text is a string and not None. Returns an empty string if input is None.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lapa_ng.pipeline.clean.strip_spaces">
+<span class="sig-prename descclassname"><span class="pre">lapa_ng.pipeline.clean.</span></span><span class="sig-name descname"><span class="pre">strip_spaces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/lapa_ng/pipeline/clean.html#strip_spaces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lapa_ng.pipeline.clean.strip_spaces" title="Link to this definition"></a></dt>
+<dd><p>Strip whitespace from the beginning and end of the text.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lapa_ng.pipeline.clean.to_lowercase">
+<span class="sig-prename descclassname"><span class="pre">lapa_ng.pipeline.clean.</span></span><span class="sig-name descname"><span class="pre">to_lowercase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/lapa_ng/pipeline/clean.html#to_lowercase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lapa_ng.pipeline.clean.to_lowercase" title="Link to this definition"></a></dt>
+<dd><p>Convert the text to lowercase.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lapa_ng.pipeline.clean.strip_accents">
+<span class="sig-prename descclassname"><span class="pre">lapa_ng.pipeline.clean.</span></span><span class="sig-name descname"><span class="pre">strip_accents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/lapa_ng/pipeline/clean.html#strip_accents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lapa_ng.pipeline.clean.strip_accents" title="Link to this definition"></a></dt>
+<dd><p>Remove diacritical marks (accents) from characters in a string.</p>
+</dd></dl>
+
+<p>Example Usage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">lapa_ng.pipeline.clean</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">create_pipeline</span><span class="p">,</span>
+    <span class="n">ensure_text</span><span class="p">,</span>
+    <span class="n">strip_spaces</span><span class="p">,</span>
+    <span class="n">to_lowercase</span><span class="p">,</span>
+    <span class="n">strip_accents</span>
+<span class="p">)</span>
+
+<span class="c1"># Create a pipeline that:</span>
+<span class="c1"># 1. Ensures text is not None</span>
+<span class="c1"># 2. Strips whitespace</span>
+<span class="c1"># 3. Converts to lowercase</span>
+<span class="c1"># 4. Removes accents</span>
+<span class="n">cleaner</span> <span class="o">=</span> <span class="n">create_pipeline</span><span class="p">(</span>
+    <span class="n">ensure_text</span><span class="p">,</span>
+    <span class="n">strip_spaces</span><span class="p">,</span>
+    <span class="n">to_lowercase</span><span class="p">,</span>
+    <span class="n">strip_accents</span>
+<span class="p">)</span>
+
+<span class="c1"># Use the pipeline</span>
+<span class="n">cleaned_text</span> <span class="o">=</span> <span class="n">cleaner</span><span class="p">(</span><span class="s2">&quot;  Café au Lait  &quot;</span><span class="p">)</span>
+<span class="c1"># Result: &quot;cafe au lait&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="usage.html" class="btn btn-neutral float-left" title="Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, LAPA-NG Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
