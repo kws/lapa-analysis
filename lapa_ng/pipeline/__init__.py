@@ -25,26 +25,10 @@ class TranslatedWordResult(NamedTuple):
     phonemes: str
     translation: list[ContextualMatchResult]
 
-def load_matchers_from_excel(rules_file: str, sheet_name: str | int | None = None, sort_function: callable = sort_rules_by_numeric_priority) -> Matcher:
-    """
-    Create a translator from a rules file.
-    """
-    rules = read_excel(rules_file, sheet_name = sheet_name)
-
-    duplicates = check_rules_for_duplicate_priorities(rules)
-    for k, v in duplicates.items():
-        logger.warning(f"For letter {k[0]} and priority {k[3]} there are {len(v)} duplicates: {', '.join(r.rule_id for r in v)}")
-
-    regex_list = []
-    for r in sort_function(rules):
-        try:
-            regex_list.append(rule_to_regex(r)) 
-        except Exception as e:
-            print(e)
-    
-    regex_matchers = [RegexMatcher(r.id, r.pattern, r.replacement, r.meta) for r in regex_list]
-    matcher_list = RegexListMatcher(regex_matchers)
-    return matcher_list
+class TranslatedPhonemeResult(NamedTuple):
+    phoneme: str
+    phoneme_index: int  
+    translation: TranslationResult
 
 
 def translate_naf(naf_file: str, matcher: Matcher, *, preprocessor: callable = None, translator: callable = None) -> Generator[TranslationResult, None, None]:
@@ -61,25 +45,35 @@ def translate_naf(naf_file: str, matcher: Matcher, *, preprocessor: callable = N
         for t_ix, t in enumerate(translator(cleaned_text, matcher)):
             yield TranslationResult(word_ix, text, t_ix, t)
 
-def coalesce_translations(translations: Iterable[TranslationResult]) -> Generator[TranslatedWordResult, None, None]:
+def coalesce_translations(translations: Iterable[TranslationResult], *, filter_silent: bool = True) -> Generator[TranslatedWordResult, None, None]:
     """
     Coalesce translations into a list of TranslatedWordResult.
     """
+    def yield_word_result(word_index: int, word: WordForm, translations: list[ContextualMatchResult]) -> Generator[TranslatedWordResult, None, None]:
+        if word:
+            phonemes = ' '.join(t.translation.match_result.phonemes for t in translations if t.translation.match_result.phonemes).strip()
+            if filter_silent and phonemes == "":
+                return
+            yield TranslatedWordResult(word_index, word, phonemes, translations)
+
     current_word_index: int | None = None
     current_word: WordForm | None = None
     current_translations: list[ContextualMatchResult] = []
+    
     for t in translations:
         if t.word_index != current_word_index:
-            if current_word:
-                phonemes = ' '.join(ct.translation.match_result.phonemes for ct in current_translations if ct.translation.match_result.phonemes).strip()
-                yield TranslatedWordResult(t.word_index, current_word, phonemes, current_translations)
+            yield from yield_word_result(current_word_index, current_word, current_translations)
             current_word_index = t.word_index
             current_word = t.word_form
             current_translations = []
 
         current_translations.append(t)
 
-    if current_word:
-        phonemes = ' '.join(t.translation.match_result.phonemes for t in current_translations if t.translation.match_result.phonemes)
-        yield TranslatedWordResult(t.word_index, current_word, phonemes, current_translations)
+    yield from yield_word_result(current_word_index, current_word, current_translations)
 
+def explode_translations(translations: Iterable[TranslationResult], *, filter_silent: bool = True) -> Generator[TranslatedPhonemeResult, None, None]:
+    for t in translations:
+        for i, ph in enumerate(t.translation.match_result.phonemes.split(" ")):
+            if filter_silent and ph == "":
+                continue
+            yield TranslatedPhonemeResult(ph, i, t)
