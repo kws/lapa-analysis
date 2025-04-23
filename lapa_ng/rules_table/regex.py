@@ -1,3 +1,10 @@
+"""
+Regular expression rule processing for LAPA-NG.
+
+This module provides functionality for converting tabular rules into
+regular expression patterns for phonetic transcription.
+"""
+
 import re
 import yaml
 from logging import getLogger
@@ -11,8 +18,20 @@ logger = getLogger(__name__)
 
 
 def rule_to_regex(rule: TabularRule, phoneme_list: PhonemeList | None = None) -> RegexRuleSpec:
-    """
-    Convert a TabularRule object to a RegexRuleSpec object.
+    """Convert a tabular rule into a regular expression specification.
+    
+    This function takes a TabularRule and converts it into a RegexRuleSpec,
+    which includes the regular expression pattern and replacement phonemes.
+    
+    Args:
+        rule: The tabular rule to convert
+        phoneme_list: Optional phoneme list for phoneme validation
+        
+    Returns:
+        A RegexRuleSpec containing the pattern and replacement information
+        
+    Raises:
+        ValueError: If the rule pattern is invalid or cannot be compiled
     """
     if phoneme_list is None:
         phoneme_list = PhonemeList.default()

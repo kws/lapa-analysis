@@ -1,3 +1,10 @@
+"""
+NAF (NLP Annotation Framework) file parsing for LAPA-NG.
+
+This module provides functionality for parsing NAF files and extracting
+word forms and their attributes.
+"""
+
 from enum import Enum
 from typing import Generator
 import xml.etree.ElementTree as ET
@@ -8,27 +15,26 @@ __all__ = ["parse_naf", "WordForm"]
 
 @dataclass
 class WordForm:
-    """
-    Represents a wf element in a NAF file.
-
-    :param text: The text of the word form.
-    :type text: str
-
-    :param attributes: The attributes of the word form.
-    :type attributes: dict[str, str]
+    """Represents a word form element from a NAF file.
+    
+    Attributes:
+        text: The text content of the word form
+        attributes: Dictionary of XML attributes associated with the word form
     """
     text: str
     attributes: dict[str, str]  
 
 def parse_naf(naf_file: str) -> Generator[WordForm, None, None]:
-    """
-    Parse a NAF file and yield WordForm objects.
-
-    :param naf_file: The path to the NAF file to parse.
-    :type naf_file: str
-
-    :return: A generator of WordForm objects.
-    :rtype: Generator[WordForm, None, None]
+    """Parse a NAF file and yield WordForm objects.
+    
+    This function parses a NAF file and yields WordForm objects for each
+    word form element found in the text section of the file.
+    
+    Args:
+        naf_file: Path to the NAF file to parse
+        
+    Yields:
+        WordForm objects representing each word form in the file
     """
     is_text_found = False  
 

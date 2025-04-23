@@ -1,10 +1,21 @@
+"""
+Data structures for tabular rule processing.
+
+This module defines the core data structures used for representing
+and processing rules from tabular data sources.
+"""
+
 from enum import Enum
 from dataclasses import dataclass
 from pathlib import Path
 
 class RuleClass(Enum):
-    """
-    An enumeration of the possible rule classes.
+    """Enumeration of possible rule classes.
+    
+    This enum defines the different types of rules that can be processed:
+    - VOWEL: Rules for vowel sounds
+    - CONSONANT: Rules for consonant sounds
+    - PREFIX: Rules for prefix patterns
     """
     VOWEL = 'V'
     CONSONANT = 'C'
@@ -13,35 +24,21 @@ class RuleClass(Enum):
 
 @dataclass
 class TabularRule:
-    """
-    A class representing a rule from a tabular data source.
-
-    :param rule_id: The ID of the rule
-    :type rule_id: str
-
-    :param rule_class: The class of the rule (VOWEL, CONSONANT, PREFIX)
-    :type rule_class: RuleClass
-
-    :param letter: The initial letter of the rule
-    :type letter: str
-
-    :param is_default: Whether the rule is a default rule
-    :type is_default: bool
-
-    :param priority: The priority of the rule
-    :type priority: int
-
-    :param description: The description of the rule
-    :type description: str
-
-    :param rule: The rule definition
-    :type rule: str
-
-    :param replaced: The letter sequence to be replaced
-    :type replaced: str
-
-    :param replaceby: Replacement letter sequence
-    :type replaceby: str
+    """Represents a rule from a tabular data source.
+    
+    This class encapsulates all the information needed to define a phonetic
+    transcription rule, including its type, priority, and transformation details.
+    
+    Attributes:
+        rule_id: Unique identifier for the rule
+        rule_class: Type of rule (VOWEL, CONSONANT, or PREFIX)
+        letter: Initial letter that the rule applies to
+        is_default: Whether this is a default rule
+        priority: Priority value for rule ordering
+        description: Human-readable description of the rule
+        rule: The rule pattern or definition
+        replaced: Letter sequence to be replaced
+        replaceby: Replacement letter sequence
     """
     rule_id: str
     rule_class: RuleClass

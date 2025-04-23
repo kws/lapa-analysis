@@ -1,3 +1,10 @@
+"""
+Regular expression rule specifications and matchers for LAPA-NG.
+
+This module provides classes and functions for working with regular expression
+based rules for phonetic transcription.
+"""
+
 from pathlib import Path
 import re
 from typing import Any
@@ -14,8 +21,16 @@ DEFAULT_CHARACTER_CLASSES = {
 
 @dataclass(frozen=True)
 class RegexRuleSpec:
-    """
-    A class representing a rule specification used to initialise a RegexMatcher.
+    """Specification for a regular expression based rule.
+    
+    This class encapsulates all the information needed to create a RegexMatcher,
+    including the pattern, replacement, and metadata.
+    
+    Attributes:
+        id: Unique identifier for the rule
+        pattern: Compiled regular expression pattern
+        replacement: Phonetic replacement string
+        meta: Additional metadata about the rule
     """
     id: str
     pattern: re.Pattern
@@ -24,22 +39,33 @@ class RegexRuleSpec:
     
 
 class RegexMatcher(Matcher):
-    """
-    A class representing a matcher that uses a regex pattern to match a word.
-
-    RegexMatchers have a few extras to allow for optimisation when matching. 
+    """A matcher that uses regular expressions for pattern matching.
     
-    First of all there are two types of matchers,
-    those that only match at the start of a word, and those that can match anywhere in a word.
-
-    Secondly, the matcher exposes the "match_group" which is the group that is matched by the regex.
-
-    When using the regex specific engine, rules are first filtered so only relevant rules based on these two properties are attempted.
+    This class implements the Matcher protocol using regular expressions.
+    It includes optimizations for prefix rules and match group extraction.
+    
+    Attributes:
+        id: Unique identifier for the matcher
+        replacement: Phonetic replacement string
+        match_group: The capturing group in the regex pattern
+        prefix: Whether the rule must match at the start of the word
+        rule: The compiled regular expression pattern
     """
 
     __slots__ = ('id', 'replacement', 'match_group', 'prefix', 'rule')
     
     def __init__(self, id: str, rule: str, replacement: str, meta: dict[str, Any] = None):
+        """Initialize a new regex matcher.
+        
+        Args:
+            id: Unique identifier for the matcher
+            rule: The regular expression pattern
+            replacement: The phonetic replacement string
+            meta: Optional metadata about the rule
+            
+        Raises:
+            ValueError: If no match group is found in the rule
+        """
         self.id = id
         self.replacement = replacement
         self.meta = meta
@@ -66,6 +92,15 @@ class RegexMatcher(Matcher):
         self.rule = re.compile(self.rule)
 
     def match(self, word: str, start:int) -> MatchResult | None:
+        """Attempt to match the rule against a word starting at the given position.
+        
+        Args:
+            word: The word to match against
+            start: Starting position in the word
+            
+        Returns:
+            MatchResult if the rule matches, None otherwise
+        """
         if self.prefix and start != 0:
             return None
 
@@ -83,8 +118,13 @@ class RegexMatcher(Matcher):
 
 
 def load_specs(rule_file: str | Path) -> tuple[RegexRuleSpec, ...]:
-    """
-    Load a YAML file containing rule specifications and return a tuple of RegexRuleSpec objects.
+    """Load rule specifications from a YAML file.
+    
+    Args:
+        rule_file: Path to the YAML file containing rule specifications
+        
+    Returns:
+        Tuple of RegexRuleSpec objects created from the file
     """
     with open(rule_file, 'r') as f:
         rules = yaml.safe_load(f)
@@ -92,7 +132,12 @@ def load_specs(rule_file: str | Path) -> tuple[RegexRuleSpec, ...]:
     return tuple([RegexRuleSpec(**rule) for rule in rules])
 
 def load_matchers(rule_file: str | Path) -> tuple[RegexMatcher, ...]:
-    """
-    Load a YAML file containing rule specifications and return a tuple of RegexMatcher objects.
+    """Load and create regex matchers from a YAML file.
+    
+    Args:
+        rule_file: Path to the YAML file containing rule specifications
+        
+    Returns:
+        Tuple of RegexMatcher objects created from the specifications
     """
     return tuple([RegexMatcher(spec) for spec in load_specs(rule_file)])

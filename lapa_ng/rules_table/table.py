@@ -1,3 +1,10 @@
+"""
+Table-based rule processing for LAPA-NG.
+
+This module provides functionality for reading and processing rules from
+tabular data sources like Excel and CSV files.
+"""
+
 from collections import defaultdict
 from pathlib import Path
 from typing import Counter, Generator
@@ -10,8 +17,16 @@ PathOrString = str | Path
 
 
 def _to_str(obj: object) -> str:
-    """
-    Convert an object to a string. Replaces nan with None
+    """Convert an object to a string, handling special cases.
+    
+    Args:
+        obj: The object to convert
+        
+    Returns:
+        String representation of the object, or None for NaN values
+        
+    Raises:
+        ValueError: If the object is not a string
     """
     if isinstance(obj, float) and np.isnan(obj):
         return None 
@@ -20,6 +35,16 @@ def _to_str(obj: object) -> str:
     return obj
 
 def dataframe_to_rules(df: pd.DataFrame, file_id: str|None = None, start_ix: int = 0) -> Generator[TabularRule, None, None]:
+    """Convert a pandas DataFrame to a sequence of TabularRule objects.
+    
+    Args:
+        df: DataFrame containing rule data
+        file_id: Optional identifier for the source file
+        start_ix: Starting index for rule numbering
+        
+    Yields:
+        TabularRule objects created from the DataFrame rows
+    """
     for row_ix, row in df.iterrows():
         # Convert the row to a list for simpler access
         row = [row.iloc[i] for i in range(len(row))]
@@ -49,17 +74,13 @@ def dataframe_to_rules(df: pd.DataFrame, file_id: str|None = None, start_ix: int
 def read_csv(file_path: PathOrString, field_separator: str = ',', skiprows: int = 0) -> list[TabularRule]:
     """Read a CSV file and return a list of TabularRule objects.
 
-    :param file_path: Path to the CSV file to read
-    :type file_path: PathOrString
-
-    :param field_separator: Character used to separate fields in the CSV file, defaults to ','
-    :type field_separator: str
-    
-    :param skiprows: Number of rows to skip from the start of the file, defaults to 0
-    :type skiprows: int
-    
-    :return: List of TabularRule objects created from the CSV data
-    :rtype: List[TabularRule]
+    Args:
+        file_path: Path to the CSV file to read
+        field_separator: Character used to separate fields in the CSV file
+        skiprows: Number of rows to skip from the start of the file
+        
+    Returns:
+        List of TabularRule objects created from the CSV data
     """
     df = pd.read_csv(file_path, sep=field_separator, skiprows=skiprows)
     return list(dataframe_to_rules(df, file_id=Path(file_path).name, start_ix=skiprows+1))
@@ -69,14 +90,15 @@ def read_csv(file_path: PathOrString, field_separator: str = ',', skiprows: int 
 def read_excel(file_path: PathOrString, sheet_name: str | int | None = None) -> list[TabularRule]:
     """Read an Excel file and return a list of TabularRule objects.
 
-    :param file_path: Path to the Excel file to read
-    :type file_path: PathOrString
-
-    :param sheet_name: Name of the sheet to read from the Excel file, defaults to None (read all sheets)
-    :type sheet_name: str | int | None
-
-    :return: List of TabularRule objects created from the Excel data
-    :rtype: List[TabularRule]
+    Args:
+        file_path: Path to the Excel file to read
+        sheet_name: Name or index of the sheet to read
+        
+    Returns:
+        List of TabularRule objects created from the Excel data
+        
+    Raises:
+        ValueError: If multiple sheets are found and no sheet_name is specified
     """
     df = pd.read_excel(file_path, sheet_name=sheet_name)
     if isinstance(df, dict):
@@ -88,22 +110,41 @@ def read_excel(file_path: PathOrString, sheet_name: str | int | None = None) -> 
     return list(dataframe_to_rules(df, file_id=file_name, start_ix=2))
 
 def sort_rules_by_numeric_priority(rules: list[TabularRule]) -> list[TabularRule]:
-    """
-    Sort rules by their numeric priority. Rules are sorted first by letter, then by prefix, then by default, and finally by priority.
+    """Sort rules by their numeric priority.
+    
+    Rules are sorted first by letter, then by prefix status, then by default status,
+    and finally by priority value.
+    
+    Args:
+        rules: List of rules to sort
+        
+    Returns:
+        Sorted list of rules
     """
     return sorted(rules, key=lambda x: (x.letter, x.rule_class != RuleClass.PREFIX, x.is_default, x.priority))
 
 def sort_rules_by_alpha_priority(rules: list[TabularRule]) -> list[TabularRule]:
-    """
-    Sort rules by their numeric priority. Rules are sorted first by letter, then by prefix, then by default, and finally by priority.
-
-    Priorities are converted to strings to mimmic the original sort order of the code.
+    """Sort rules by their priority, treating priorities as strings.
+    
+    This function mimics the original sort order of the code by converting
+    priorities to strings before comparison.
+    
+    Args:
+        rules: List of rules to sort
+        
+    Returns:
+        Sorted list of rules
     """
     return sorted(rules, key=lambda x: (x.letter, x.rule_class != RuleClass.PREFIX, x.is_default, str(x.priority)))
 
 def check_rules_for_duplicate_priorities(rules: list[TabularRule]) -> dict[int, list[TabularRule]]:
-    """
-    Check rules for duplicate priorities.
+    """Check rules for duplicate priorities.
+    
+    Args:
+        rules: List of rules to check
+        
+    Returns:
+        Dictionary mapping priority tuples to lists of rules with that priority
     """
     rules_by_priority = defaultdict(list)
     for rule in rules:
