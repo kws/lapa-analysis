@@ -58,6 +58,16 @@
 <li class="toctree-l3"><a class="reference internal" href="#regex-rules">Regex Rules</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#factory-pattern">Factory Pattern</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#matcher-specification">Matcher Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#factory-functions">Factory Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#create_matcher"><code class="docutils literal notranslate"><span class="pre">create_matcher()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#parse_matcher_spec"><code class="docutils literal notranslate"><span class="pre">parse_matcher_spec()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#MatcherSpec"><code class="docutils literal notranslate"><span class="pre">MatcherSpec</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#command-line-interface">Command-Line Interface</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#converting-rules">Converting Rules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#transcribing-text">Transcribing Text</a></li>
@@ -188,15 +198,102 @@
 - Optimizing rule matching performance</p>
 </section>
 </section>
+<section id="factory-pattern">
+<h2>Factory Pattern<a class="headerlink" href="#factory-pattern" title="Link to this heading"></a></h2>
+<p>LAPA-NG uses a factory pattern to create different types of matchers based on a specification string. This provides a flexible and consistent way to create matchers for different use cases.</p>
+<section id="matcher-specification">
+<h3>Matcher Specification<a class="headerlink" href="#matcher-specification" title="Link to this heading"></a></h3>
+<p>The matcher specification follows the format:</p>
+<blockquote>
+<div><p>[prefix:][filename[#sheet]][?options]</p>
+</div></blockquote>
+<p>Where:
+- <code class="docutils literal notranslate"><span class="pre">prefix</span></code>: Optional prefix indicating the type of matcher (‘ng’ or ‘classic’)
+- <code class="docutils literal notranslate"><span class="pre">filename</span></code>: Path to the rules file (Excel or YAML)
+- <code class="docutils literal notranslate"><span class="pre">sheet</span></code>: Optional sheet name for Excel files
+- <code class="docutils literal notranslate"><span class="pre">options</span></code>: Optional query string parameters (e.g., ?sort=numeric)</p>
+<p>Available options for the ‘ng’ prefix:
+- <code class="docutils literal notranslate"><span class="pre">sort</span></code>: Rule sorting method (‘numeric’ or ‘alpha’)</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">numeric</span></code>: Sort rules by numeric priority (default)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">alpha</span></code>: Sort rules alphabetically by letter and priority</p></li>
+</ul>
+</div></blockquote>
+<p>Examples:
+.. code-block:: python</p>
+<blockquote>
+<div><p># Next-gen matcher with specific sheet and numeric sorting (default)
+matcher = create_matcher(‘ng:rules.xlsx#RULES’)</p>
+<p># Next-gen matcher with alpha sorting
+matcher = create_matcher(‘ng:rules.xlsx#RULES?sort=alpha’)</p>
+<p># Classic matcher, default sheet
+matcher = create_matcher(‘classic:rules.xlsx’)</p>
+<p># Next-gen matcher (default prefix)
+matcher = create_matcher(‘rules.xlsx#RULES’)</p>
+</div></blockquote>
+</section>
+<section id="factory-functions">
+<h3>Factory Functions<a class="headerlink" href="#factory-functions" title="Link to this heading"></a></h3>
+<p>The factory module provides the following functions:</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="create_matcher">
+<span class="sig-name descname"><span class="pre">create_matcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matcher_spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Matcher</span></span></span><a class="headerlink" href="#create_matcher" title="Link to this definition"></a></dt>
+<dd><p>Create a matcher based on a specification string.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>matcher_spec: Specification string in format ‘[prefix:][filename[#sheet]][?options]’</p>
+</dd>
+<dt>Returns:</dt><dd><p>A Matcher instance configured according to the specification</p>
+</dd>
+<dt>Raises:</dt><dd><dl class="simple">
+<dt>ValueError: If the prefix is unknown, the specification is invalid,</dt><dd><p>or an invalid sort option is provided</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="parse_matcher_spec">
+<span class="sig-name descname"><span class="pre">parse_matcher_spec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matcher_spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#MatcherSpec" title="MatcherSpec"><span class="pre">MatcherSpec</span></a></span></span><a class="headerlink" href="#parse_matcher_spec" title="Link to this definition"></a></dt>
+<dd><p>Parse a matcher specification string into its components.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>matcher_spec: The specification string to parse</p>
+</dd>
+<dt>Returns:</dt><dd><p>A MatcherSpec object containing the parsed components</p>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If the specification string is invalid</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="MatcherSpec">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MatcherSpec</span></span><a class="headerlink" href="#MatcherSpec" title="Link to this definition"></a></dt>
+<dd><p>A dataclass representing a parsed matcher specification.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>prefix: The matcher prefix (‘ng’ or ‘classic’)
+filename: Path to the rules file
+section: Optional sheet name
+options: Optional query string parameters</p>
+</dd>
+<dt>Properties:</dt><dd><p>qs: Dictionary of parsed query string parameters
+qs_flat: Simplified dictionary with single values for each parameter</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
 <section id="command-line-interface">
 <h2>Command-Line Interface<a class="headerlink" href="#command-line-interface" title="Link to this heading"></a></h2>
 <p>LAPA-NG provides a command-line interface for common operations:</p>
 <section id="converting-rules">
 <h3>Converting Rules<a class="headerlink" href="#converting-rules" title="Link to this heading"></a></h3>
 <p>Convert Excel-based rules to YAML format:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>lapa<span class="w"> </span>convert-excel<span class="w"> </span>rules.xlsx<span class="w"> </span>rules.yaml
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>lapa-ng<span class="w"> </span>convert-excel<span class="w"> </span>rules.xlsx<span class="w"> </span>rules.yaml
 <span class="c1"># Optional: specify a particular sheet</span>
-lapa<span class="w"> </span>convert-excel<span class="w"> </span>rules.xlsx<span class="w"> </span>rules.yaml<span class="w"> </span>--sheet<span class="w"> </span><span class="s2">&quot;RULES&quot;</span>
+lapa-ng<span class="w"> </span>convert-excel<span class="w"> </span>rules.xlsx<span class="w"> </span>rules.yaml<span class="w"> </span>--sheet<span class="w"> </span><span class="s2">&quot;RULES&quot;</span>
 </pre></div>
 </div>
 <p>This command reads rules from an Excel file and converts them to YAML format,
@@ -205,9 +302,7 @@ which can be used directly with the regex rules system.</p>
 <section id="transcribing-text">
 <h3>Transcribing Text<a class="headerlink" href="#transcribing-text" title="Link to this heading"></a></h3>
 <p>Transcribe words from the command line:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>lapa<span class="w"> </span>translate-words<span class="w"> </span>rules.xlsx<span class="w"> </span>word1<span class="w"> </span>word2<span class="w"> </span>word3
-<span class="c1"># Optional: specify a particular sheet</span>
-lapa<span class="w"> </span>translate-words<span class="w"> </span>rules.xlsx<span class="w"> </span>word1<span class="w"> </span>word2<span class="w"> </span>word3<span class="w"> </span>--sheet<span class="w"> </span><span class="s2">&quot;RULES&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>lapa-ng<span class="w"> </span>translate-words<span class="w"> </span><span class="s1">&#39;rules.xlsx#RULES&#39;</span><span class="w"> </span>word1<span class="w"> </span>word2<span class="w"> </span>word3
 </pre></div>
 </div>
 <p>This command transcribes one or more words using the specified rules and outputs
@@ -216,9 +311,7 @@ the phonetic transcription in SAMPA format.</p>
 <section id="processing-naf-files">
 <h3>Processing NAF Files<a class="headerlink" href="#processing-naf-files" title="Link to this heading"></a></h3>
 <p>Process text from NAF (NLP Annotation Framework) files:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>lapa<span class="w"> </span>translate-naf<span class="w"> </span>input.naf<span class="w"> </span>rules.xlsx
-<span class="c1"># Optional: specify a particular sheet</span>
-lapa<span class="w"> </span>translate-naf<span class="w"> </span>input.naf<span class="w"> </span>rules.xlsx<span class="w"> </span>--sheet<span class="w"> </span><span class="s2">&quot;RULES&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>lapa-ng<span class="w"> </span>translate-naf<span class="w"> </span><span class="s1">&#39;rules.xlsx#RULES&#39;</span><span class="w"> </span>input.naf
 </pre></div>
 </div>
 <p>This command reads text from a NAF file, transcribes it using the specified rules,
@@ -234,7 +327,7 @@ transcription, including:
 <section id="testing">
 <h3>Testing<a class="headerlink" href="#testing" title="Link to this heading"></a></h3>
 <p>Run the test suite:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>lapa<span class="w"> </span><span class="nb">test</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>lapa-ng<span class="w"> </span><span class="nb">test</span>
 </pre></div>
 </div>
 <p>This command runs the test suite to verify the system is working correctly.</p>
@@ -255,20 +348,20 @@ transcription, including:
 <li><p>Convert the rules to YAML format:
 .. code-block:: bash</p>
 <blockquote>
-<div><p>lapa convert-excel rules.xlsx rules.yaml</p>
+<div><p>lapa-ng convert-excel rules.xlsx rules.yaml</p>
 </div></blockquote>
 </li>
 <li><p>Use the rules to transcribe text:
 .. code-block:: bash</p>
 <blockquote>
-<div><p>lapa translate-words rules.xlsx “voorbeeld” “taal”
+<div><p>lapa-ng translate-words ‘rules.xlsx#RULES’ “voorbeeld” “taal”
 # Output: v r o n d &#64; r b &#64; l t a l</p>
 </div></blockquote>
 </li>
 <li><p>Process a NAF file:
 .. code-block:: bash</p>
 <blockquote>
-<div><p>lapa translate-naf document.naf rules.xlsx &gt; transcriptions.csv</p>
+<div><p>lapa-ng translate-naf ‘rules.xlsx#RULES’ document.naf &gt; transcriptions.csv</p>
 </div></blockquote>
 </li>
 </ol>
