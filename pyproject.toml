@@ -1,6 +1,6 @@
 [project]
 name = "lapa-ng"
-version = "0.1.1"
+version = "0.1.2"
 description = "LAPA allows for converting digitised early modern Dutch theatre plays into (presumed) phonetic script (SAMPA). To achieve this, a ruleset has been created that codifies the transliteration to SAMPA. This codebase contains parsers for the rule sets (xls format), parsers for the digitised texts (naf xml) and logic to perform counts and correlations."
 authors = [
     {name = "Fieke Smitskamp", email = "fieke.smitskamp@gmail.com"},
