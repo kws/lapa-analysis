@@ -109,6 +109,19 @@ class ClassicMatcher(Matcher):
         self.sampify._apply_rule = _CallInterceptor(self.sampify._apply_rule)
         self.phoneme_list = PhonemeList.default()
 
+    @property
+    def id(self) -> str:
+        """Return a string identifier for this matcher."""
+        return f"ClassicMatcher(rules={len(self.rule_ids)})"
+
+    def __repr__(self) -> str:
+        """Return a string representation of this matcher."""
+        return f"ClassicMatcher(rules={len(self.rule_ids)})"
+
+    def __len__(self) -> int:
+        """Return the number of rules in this matcher."""
+        return len(self.rule_ids)
+
     def _rule_for_meta(self, meta):
         first_letter = meta["rule"][0]
         return self.rule_ids.get((first_letter, meta["description"]))

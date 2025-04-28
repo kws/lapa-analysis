@@ -108,6 +108,90 @@ The regex rules system provides functions for:
 - Creating matchers from rule specifications
 - Optimizing rule matching performance
 
+Factory Pattern
+-------------
+
+LAPA-NG uses a factory pattern to create different types of matchers based on a specification string. This provides a flexible and consistent way to create matchers for different use cases.
+
+Matcher Specification
+~~~~~~~~~~~~~~~~~~~
+
+The matcher specification follows the format:
+
+    [prefix:][filename[#sheet]][?options]
+
+Where:
+- ``prefix``: Optional prefix indicating the type of matcher ('ng' or 'classic')
+- ``filename``: Path to the rules file (Excel or YAML)
+- ``sheet``: Optional sheet name for Excel files
+- ``options``: Optional query string parameters (e.g., ?sort=numeric)
+
+Available options for the 'ng' prefix:
+- ``sort``: Rule sorting method ('numeric' or 'alpha')
+  - ``numeric``: Sort rules by numeric priority (default)
+  - ``alpha``: Sort rules alphabetically by letter and priority
+
+Examples:
+.. code-block:: python
+
+    # Next-gen matcher with specific sheet and numeric sorting (default)
+    matcher = create_matcher('ng:rules.xlsx#RULES')
+
+    # Next-gen matcher with alpha sorting
+    matcher = create_matcher('ng:rules.xlsx#RULES?sort=alpha')
+
+    # Classic matcher, default sheet
+    matcher = create_matcher('classic:rules.xlsx')
+
+    # Next-gen matcher (default prefix)
+    matcher = create_matcher('rules.xlsx#RULES')
+
+Factory Functions
+~~~~~~~~~~~~~~~
+
+The factory module provides the following functions:
+
+.. py:function:: create_matcher(matcher_spec: str) -> Matcher
+
+   Create a matcher based on a specification string.
+
+   Args:
+       matcher_spec: Specification string in format '[prefix:][filename[#sheet]][?options]'
+
+   Returns:
+       A Matcher instance configured according to the specification
+
+   Raises:
+       ValueError: If the prefix is unknown, the specification is invalid,
+                  or an invalid sort option is provided
+
+.. py:function:: parse_matcher_spec(matcher_spec: str) -> MatcherSpec
+
+   Parse a matcher specification string into its components.
+
+   Args:
+       matcher_spec: The specification string to parse
+
+   Returns:
+       A MatcherSpec object containing the parsed components
+
+   Raises:
+       ValueError: If the specification string is invalid
+
+.. py:class:: MatcherSpec
+
+   A dataclass representing a parsed matcher specification.
+
+   Attributes:
+       prefix: The matcher prefix ('ng' or 'classic')
+       filename: Path to the rules file
+       section: Optional sheet name
+       options: Optional query string parameters
+
+   Properties:
+       qs: Dictionary of parsed query string parameters
+       qs_flat: Simplified dictionary with single values for each parameter
+
 Command-Line Interface
 --------------------
 
@@ -120,9 +204,9 @@ Convert Excel-based rules to YAML format:
 
 .. code-block:: bash
 
-    lapa convert-excel rules.xlsx rules.yaml
+    lapa-ng convert-excel rules.xlsx rules.yaml
     # Optional: specify a particular sheet
-    lapa convert-excel rules.xlsx rules.yaml --sheet "RULES"
+    lapa-ng convert-excel rules.xlsx rules.yaml --sheet "RULES"
 
 This command reads rules from an Excel file and converts them to YAML format,
 which can be used directly with the regex rules system.
@@ -134,9 +218,7 @@ Transcribe words from the command line:
 
 .. code-block:: bash
 
-    lapa translate-words rules.xlsx word1 word2 word3
-    # Optional: specify a particular sheet
-    lapa translate-words rules.xlsx word1 word2 word3 --sheet "RULES"
+    lapa-ng translate-words 'rules.xlsx#RULES' word1 word2 word3
 
 This command transcribes one or more words using the specified rules and outputs
 the phonetic transcription in SAMPA format.
@@ -148,9 +230,7 @@ Process text from NAF (NLP Annotation Framework) files:
 
 .. code-block:: bash
 
-    lapa translate-naf input.naf rules.xlsx
-    # Optional: specify a particular sheet
-    lapa translate-naf input.naf rules.xlsx --sheet "RULES"
+    lapa-ng translate-naf 'rules.xlsx#RULES' input.naf
 
 This command reads text from a NAF file, transcribes it using the specified rules,
 and outputs the results in CSV format with detailed information about each
@@ -169,7 +249,7 @@ Run the test suite:
 
 .. code-block:: bash
 
-    lapa test
+    lapa-ng test
 
 This command runs the test suite to verify the system is working correctly.
 
@@ -189,16 +269,16 @@ Here's a complete example of how the components work together:
 
 2. Convert the rules to YAML format:
    .. code-block:: bash
-      lapa convert-excel rules.xlsx rules.yaml
+      lapa-ng convert-excel rules.xlsx rules.yaml
 
 3. Use the rules to transcribe text:
    .. code-block:: bash
-      lapa translate-words rules.xlsx "voorbeeld" "taal"
+      lapa-ng translate-words 'rules.xlsx#RULES' "voorbeeld" "taal"
       # Output: v r o n d @ r b @ l t a l
 
 4. Process a NAF file:
    .. code-block:: bash
-      lapa translate-naf document.naf rules.xlsx > transcriptions.csv
+      lapa-ng translate-naf 'rules.xlsx#RULES' document.naf > transcriptions.csv
 
 The system will:
 1. Load and validate the rules

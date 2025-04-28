@@ -252,11 +252,11 @@ class RegexListMatcher(Matcher):
     @property
     def id(self) -> str:
         """Return a string identifier for this matcher."""
-        return f"RegexListMatcher(len={len(self.rules)})"
+        return f"RegexListMatcher(rules={len(self.rules)})"
 
     def __repr__(self) -> str:
         """Return a string representation of this matcher."""
-        return f"RegexListMatcher(len={len(self.rules)})"
+        return f"RegexListMatcher(rules={len(self.rules)})"
 
     def __len__(self) -> int:
         """Return the number of rules in this matcher."""

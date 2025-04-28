@@ -43,7 +43,7 @@ This project uses [Poetry](https://python-poetry.org/) for dependency management
 Alternatively, you can run commands directly using `poetry run`:
 
 ```bash
-poetry run python -m lapa_classic --help
+poetry run lapa-ng --help
 ```
 
 ## File Structure
@@ -68,40 +68,88 @@ The code documentation can be found in the `docs` directory or browsed on [https
 
 ## Usage
 
-The code provides two main commands through the CLI interface:
+LAPA-NG provides a command-line interface for common operations. The system uses a factory pattern to create different types of matchers based on a specification string.
 
-### Processing NAF files (sampify)
+### Matcher Specification
 
-Process a NAF file using the specified rules to generate counts and translations:
+The matcher specification follows the format:
 
+    [prefix:][filename[#sheet]][?options]
+
+Where:
+- `prefix`: Optional prefix indicating the type of matcher ('ng' or 'classic')
+- `filename`: Path to the rules file (Excel or YAML)
+- `sheet`: Optional sheet name for Excel files
+- `options`: Optional query string parameters (e.g., ?sort=numeric)
+
+Available options for the 'ng' prefix:
+- `sort`: Rule sorting method ('numeric' or 'alpha')
+  - `numeric`: Sort rules by numeric priority (default)
+  - `alpha`: Sort rules alphabetically by letter and priority
+
+Examples:
 ```bash
-python -m lapa_classic sampify -n '/path/to/naf.xml' -r '/path/to/rules.xls' -o '/path/to/output'
+# Next-gen matcher with specific sheet and numeric sorting (default)
+lapa-ng translate-words 'ng:rules.xlsx#RULES' word1 word2
+
+# Next-gen matcher with alpha sorting
+lapa-ng translate-words 'ng:rules.xlsx#RULES?sort=alpha' word1 word2
+
+# Classic matcher, default sheet
+lapa-ng translate-words 'classic:rules.xlsx' word1 word2
+
+# Next-gen matcher (default prefix)
+lapa-ng translate-words 'rules.xlsx#RULES' word1 word2
 ```
 
-This will produce:
+### Transcribing Words
 
-- An Excel file with counts per sampa sound
-- A CSV file with translations
-- Debug and warning log files
-
-### Validating rules (validate)
-
-Validate a rules file against a reference translation:
+Transcribe one or more words using the specified rules:
 
 ```bash
-python -m lapa_classic validate -r '/path/to/rules.xls' -t '/path/to/test.txt' -o '/path/to/output'
+# Using numeric sorting (default)
+lapa-ng translate-words 'rules.xlsx#RULES' word1 word2 word3
+
+# Using alpha sorting
+lapa-ng translate-words 'rules.xlsx#RULES?sort=alpha' word1 word2 word3
 ```
 
-This will generate a validation report showing any discrepancies between the rules and expected translations.
+This will output the phonetic transcription in SAMPA format for each word.
+
+### Processing NAF Files
+
+Process text from NAF (NLP Annotation Framework) files:
+
+```bash
+# Using numeric sorting (default)
+lapa-ng translate-naf 'rules.xlsx#RULES' input.naf
+
+# Using alpha sorting
+lapa-ng translate-naf 'rules.xlsx#RULES?sort=alpha' input.naf
+```
+
+This will:
+1. Read the NAF file
+2. Apply the specified rules
+3. Output a CSV file with detailed transcription information
+
+### Converting Rules
+
+Convert Excel-based rules to YAML format:
+
+```bash
+lapa-ng convert-excel rules.xlsx rules.yaml --sheet RULES
+```
 
 ### Getting Help
 
 You can get help for any command by adding `--help`:
 
 ```bash
-python -m lapa_classic --help
-python -m lapa_classic sampify --help
-python -m lapa_classic validate --help
+lapa-ng --help
+lapa-ng translate-words --help
+lapa-ng translate-naf --help
+lapa-ng convert-excel --help
 ```
 
 ## Sample Files

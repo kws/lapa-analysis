@@ -84,14 +84,12 @@ def check_rules_for_duplicate_priorities(
     return duplicates
 
 
-def load_matcher(
+def load_regex_matcher_list(
     rules_file: str,
     sheet_name: str | int | None = None,
     sort_function: callable = sort_rules_by_numeric_priority,
-) -> RegexListMatcher:
-    """
-    Load a set of excel rules and convert them to a RegexListMatcher.
-    """
+) -> list[RegexMatcher]:
+    """Load a set of excel rules and convert them to a list of RegexMatchers."""
     rules = read_excel(rules_file, sheet_name=sheet_name)
 
     duplicates = check_rules_for_duplicate_priorities(rules)
@@ -108,8 +106,20 @@ def load_matcher(
             logger.error(f"Error converting rule {r.rule_id} to regex: {e}")
 
     regex_matchers = [RegexMatcher(r) for r in regex_list]
-    matcher_list = RegexListMatcher(regex_matchers)
-    return matcher_list
+    return regex_matchers
+
+
+def load_matcher(
+    rules_file: str,
+    sheet_name: str | int | None = None,
+    sort_function: callable = sort_rules_by_numeric_priority,
+) -> RegexListMatcher:
+    """
+    Load a set of excel rules and convert them to a RegexListMatcher.
+    """
+    return RegexListMatcher(
+        load_regex_matcher_list(rules_file, sheet_name, sort_function)
+    )
 
 
 def table_rule_to_regex_spec(
@@ -190,3 +200,30 @@ def table_rule_to_regex_spec(
             "priority": rule.priority,
         },
     )
+
+
+class TableRulesMatcher(RegexListMatcher):
+    """A matcher that uses a list of regex matchers to match words.
+
+    This class extends the RegexListMatcher by providing a helpful initialiser
+    that loads the rules from an Excel file and converts them into a list of
+    RegexMatchers. This gives us a similar interface to the ClassicMatcher.
+    """
+
+    def __init__(
+        self,
+        rules_file: str,
+        sheet_name: str | int | None = None,
+        sort_function: callable = sort_rules_by_numeric_priority,
+    ):
+        """Initialise the TableRulesMatcher.
+
+        Args:
+            rules_file: The path to the Excel file containing the rules
+            sheet_name: The name of the sheet in the Excel file containing the rules
+            sort_function: The function to use to sort the rules
+        """
+        matcher_list = load_regex_matcher_list(
+            rules_file, sheet_name=sheet_name, sort_function=sort_function
+        )
+        super().__init__(matcher_list)
