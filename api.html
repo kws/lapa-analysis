@@ -47,44 +47,25 @@
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#core-components">Core Components</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#rules-and-matchers">Rules and Matchers</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.rules.matchers.MatchResult"><code class="docutils literal notranslate"><span class="pre">MatchResult</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.rules.matchers.ContextualMatchResult"><code class="docutils literal notranslate"><span class="pre">ContextualMatchResult</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.rules.matchers.Matcher"><code class="docutils literal notranslate"><span class="pre">Matcher</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.rules.matchers.RuleListMatcher"><code class="docutils literal notranslate"><span class="pre">RuleListMatcher</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.rules.matchers.translate"><code class="docutils literal notranslate"><span class="pre">translate()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.rules.matchers.CachedTranslator"><code class="docutils literal notranslate"><span class="pre">CachedTranslator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#translator">Translator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#matcher">Matcher</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#implementations">Implementations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-types">Data Types</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#rule-tables">Rule Tables</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.rules_table.table.read_excel"><code class="docutils literal notranslate"><span class="pre">read_excel()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.rules_table.table.read_csv"><code class="docutils literal notranslate"><span class="pre">read_csv()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rule-systems">Rule Systems</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#table-rules">Table Rules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#regex-rules">Regex Rules</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#regex-rules">Regex Rules</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.rules_regex.rules.RegexRuleSpec"><code class="docutils literal notranslate"><span class="pre">RegexRuleSpec</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.rules_regex.rules.RegexMatcher"><code class="docutils literal notranslate"><span class="pre">RegexMatcher</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.rules_regex.rules.load_matchers"><code class="docutils literal notranslate"><span class="pre">load_matchers()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#command-line-interface">Command-Line Interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#converting-rules">Converting Rules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#transcribing-text">Transcribing Text</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#processing-naf-files">Processing NAF Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#testing">Testing</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#text-processing">Text Processing</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#naf-processing">NAF Processing</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.naf.WordForm"><code class="docutils literal notranslate"><span class="pre">WordForm</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.naf.parse_naf"><code class="docutils literal notranslate"><span class="pre">parse_naf()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#text-cleaning">Text Cleaning</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.pipeline.clean.create_pipeline"><code class="docutils literal notranslate"><span class="pre">create_pipeline()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.pipeline.clean.ensure_text"><code class="docutils literal notranslate"><span class="pre">ensure_text()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.pipeline.clean.strip_spaces"><code class="docutils literal notranslate"><span class="pre">strip_spaces()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.pipeline.clean.to_lowercase"><code class="docutils literal notranslate"><span class="pre">to_lowercase()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#lapa_ng.pipeline.clean.strip_accents"><code class="docutils literal notranslate"><span class="pre">strip_accents()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#usage-example">Usage Example</a></li>
 </ul>
 </li>
 </ul>
@@ -118,374 +99,185 @@
 <p>This page provides detailed documentation for the LAPA-NG Python API, a system for phonetic transcription of Dutch text using rule-based pattern matching.</p>
 <section id="core-components">
 <h2>Core Components<a class="headerlink" href="#core-components" title="Link to this heading"></a></h2>
-<section id="rules-and-matchers">
-<h3>Rules and Matchers<a class="headerlink" href="#rules-and-matchers" title="Link to this heading"></a></h3>
-<p>The core of LAPA-NG is its rule-based matching system that converts written text into phonetic sounds.</p>
-<p id="module-lapa_ng.rules.matchers">Core matching functionality for phonetic transcription.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="lapa_ng.rules.matchers.MatchResult">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lapa_ng.rules.matchers.</span></span><span class="sig-name descname"><span class="pre">MatchResult</span></span><a class="headerlink" href="#lapa_ng.rules.matchers.MatchResult" title="Link to this definition"></a></dt>
-<dd><p>Result of a successful rule match.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>word</strong> (<em>str</em>) – Original word being matched</p></li>
-<li><p><strong>start</strong> (<em>int</em>) – Starting position of the match</p></li>
-<li><p><strong>matched</strong> (<em>str</em>) – The substring that was matched</p></li>
-<li><p><strong>phonemes</strong> (<em>str</em>) – Phonetic transcription for the matched substring</p></li>
-<li><p><strong>remainder</strong> (<em>str</em>) – Remaining part of the word after the match</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="lapa_ng.rules.matchers.ContextualMatchResult">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lapa_ng.rules.matchers.</span></span><span class="sig-name descname"><span class="pre">ContextualMatchResult</span></span><a class="headerlink" href="#lapa_ng.rules.matchers.ContextualMatchResult" title="Link to this definition"></a></dt>
-<dd><p>Enhanced match result including rule information.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>match_result</strong> (<a class="reference internal" href="#lapa_ng.rules.matchers.MatchResult" title="lapa_ng.rules.matchers.MatchResult"><em>MatchResult</em></a>) – The basic match result</p></li>
-<li><p><strong>rule_id</strong> (<em>str</em>) – Identifier of the rule that matched</p></li>
-<li><p><strong>rules_attempted</strong> (<em>tuple</em><em>[</em><em>str</em><em>, </em><em>...</em><em>]</em>) – Tuple of rule IDs that were attempted before finding a match</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="lapa_ng.rules.matchers.Matcher">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lapa_ng.rules.matchers.</span></span><span class="sig-name descname"><span class="pre">Matcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Protocol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lapa_ng.rules.matchers.Matcher" title="Link to this definition"></a></dt>
-<dd><p>Protocol defining the interface for rule matchers.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="lapa_ng.rules.matchers.Matcher.match">
-<span class="sig-name descname"><span class="pre">match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#lapa_ng.rules.matchers.MatchResult" title="lapa_ng.rules.matchers.MatchResult"><span class="pre">MatchResult</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#lapa_ng.rules.matchers.Matcher.match" title="Link to this definition"></a></dt>
-<dd><p>Match a substring of a word against a specific rule.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>word</strong> (<em>str</em>) – The word to match against</p></li>
-<li><p><strong>start</strong> (<em>int</em>) – Starting position in the word</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>MatchResult if successful, None otherwise</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">id</span> <span class="pre">-&gt;</span> <span class="pre">str</span></span></dt>
-<dd><p>Return the unique identifier for this matcher.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="lapa_ng.rules.matchers.RuleListMatcher">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lapa_ng.rules.matchers.</span></span><span class="sig-name descname"><span class="pre">RuleListMatcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matcher</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lapa_ng.rules.matchers.RuleListMatcher" title="Link to this definition"></a></dt>
-<dd><p>A matcher that attempts to match a word against a list of rules in sequence.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>rules</strong> (<em>list</em><em>[</em><a class="reference internal" href="#lapa_ng.rules.matchers.Matcher" title="lapa_ng.rules.matchers.Matcher"><em>Matcher</em></a><em>]</em>) – List of matchers to try in sequence</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="lapa_ng.rules.matchers.translate">
-<span class="sig-prename descclassname"><span class="pre">lapa_ng.rules.matchers.</span></span><span class="sig-name descname"><span class="pre">translate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">part_matcher</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#lapa_ng.rules.matchers.Matcher" title="lapa_ng.rules.matchers.Matcher"><span class="pre">Matcher</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Generator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#lapa_ng.rules.matchers.ContextualMatchResult" title="lapa_ng.rules.matchers.ContextualMatchResult"><span class="pre">ContextualMatchResult</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#lapa_ng.rules.matchers.translate" title="Link to this definition"></a></dt>
-<dd><p>Translate a word into phonemes using the given matcher.</p>
-<p>This function attempts to match the entire word against the rules and yields
-a ContextualMatchResult for each match found. If no rule matches a character,
-it yields a ‘silent’ match with empty phonemes.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>word</strong> (<em>str</em>) – The word to translate</p></li>
-<li><p><strong>part_matcher</strong> (<a class="reference internal" href="#lapa_ng.rules.matchers.Matcher" title="lapa_ng.rules.matchers.Matcher"><em>Matcher</em></a>) – The matcher to use for rule matching</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Generator yielding ContextualMatchResult for each match or non-match</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="lapa_ng.rules.matchers.CachedTranslator">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lapa_ng.rules.matchers.</span></span><span class="sig-name descname"><span class="pre">CachedTranslator</span></span><a class="headerlink" href="#lapa_ng.rules.matchers.CachedTranslator" title="Link to this definition"></a></dt>
-<dd><p>A translator that caches results to improve performance.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>translate_func</strong> (<em>callable</em>) – The function to use for translation</p></li>
-<li><p><strong>cache_size</strong> (<em>int</em>) – Maximum number of translations to cache (default: 10,000)</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="lapa_ng.rules.matchers.CachedTranslator.translate">
-<span class="sig-name descname"><span class="pre">translate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#lapa_ng.rules.matchers.Matcher" title="lapa_ng.rules.matchers.Matcher"><span class="pre">Matcher</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Generator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#lapa_ng.rules.matchers.ContextualMatchResult" title="lapa_ng.rules.matchers.ContextualMatchResult"><span class="pre">ContextualMatchResult</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#lapa_ng.rules.matchers.CachedTranslator.translate" title="Link to this definition"></a></dt>
-<dd><p>Translate a word using the cached translator.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>word</strong> (<em>str</em>) – The word to translate</p></li>
-<li><p><strong>translator</strong> (<a class="reference internal" href="#lapa_ng.rules.matchers.Matcher" title="lapa_ng.rules.matchers.Matcher"><em>Matcher</em></a>) – The matcher to use for rule matching</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Generator yielding ContextualMatchResult for each match</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lapa_ng.rules.matchers.CachedTranslator.__call__">
-<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#lapa_ng.rules.matchers.Matcher" title="lapa_ng.rules.matchers.Matcher"><span class="pre">Matcher</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Generator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#lapa_ng.rules.matchers.ContextualMatchResult" title="lapa_ng.rules.matchers.ContextualMatchResult"><span class="pre">ContextualMatchResult</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#lapa_ng.rules.matchers.CachedTranslator.__call__" title="Link to this definition"></a></dt>
-<dd><p>Allow the translator to be called as a function.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>word</strong> (<em>str</em>) – The word to translate</p></li>
-<li><p><strong>translator</strong> (<a class="reference internal" href="#lapa_ng.rules.matchers.Matcher" title="lapa_ng.rules.matchers.Matcher"><em>Matcher</em></a>) – The matcher to use for rule matching</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Generator yielding ContextualMatchResult for each match</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+<p>The LAPA-NG system is built around several core components that work together to perform phonetic transcription:</p>
+<section id="translator">
+<h3>Translator<a class="headerlink" href="#translator" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">Translator</span></code> protocol defines the interface for translating words into phonemes. It provides a single method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">translate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">word</span><span class="p">:</span> <span class="n">WordOrWordList</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">emit</span><span class="p">:</span> <span class="n">EmitValue</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">TranslationResult</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The translator can process either a single word or a list of words, and can emit results at different granularities (word, rule, or phoneme level).</p>
 </section>
-<section id="rule-tables">
-<h3>Rule Tables<a class="headerlink" href="#rule-tables" title="Link to this heading"></a></h3>
-<p>Rules can be loaded from Excel spreadsheets or CSV files.</p>
-<p id="module-lapa_ng.rules_table.table">Table-based rule processing functionality.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="lapa_ng.rules_table.table.read_excel">
-<span class="sig-prename descclassname"><span class="pre">lapa_ng.rules_table.table.</span></span><span class="sig-name descname"><span class="pre">read_excel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sheet_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">TabularRule</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#lapa_ng.rules_table.table.read_excel" title="Link to this definition"></a></dt>
-<dd><p>Read rules from an Excel file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>file_path</strong> – Path to Excel file</p></li>
-<li><p><strong>sheet_name</strong> – Name or index of sheet to read</p></li>
+<section id="matcher">
+<h3>Matcher<a class="headerlink" href="#matcher" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">Matcher</span></code> protocol defines how to match substrings of words against rules and return corresponding phonetic transcriptions:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">word</span><span class="p">:</span> <span class="n">Word</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="n">MatchResult</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="implementations">
+<h3>Implementations<a class="headerlink" href="#implementations" title="Link to this heading"></a></h3>
+<p>The system provides several concrete implementations:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MatchingTranslator</span></code>: A translator that uses a matcher to translate words into phonemes</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CachedTranslator</span></code>: A translator wrapper that caches results to improve performance</p></li>
 </ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>List of TabularRule objects</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="lapa_ng.rules_table.table.read_csv">
-<span class="sig-prename descclassname"><span class="pre">lapa_ng.rules_table.table.</span></span><span class="sig-name descname"><span class="pre">read_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_separator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">','</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skiprows</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">TabularRule</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#lapa_ng.rules_table.table.read_csv" title="Link to this definition"></a></dt>
-<dd><p>Read rules from a CSV file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>file_path</strong> – Path to CSV file</p></li>
-<li><p><strong>field_separator</strong> – Character used to separate fields</p></li>
-<li><p><strong>skiprows</strong> – Number of rows to skip at the start</p></li>
+</section>
+<section id="data-types">
+<h3>Data Types<a class="headerlink" href="#data-types" title="Link to this heading"></a></h3>
+<p>The system uses several key data types:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Word</span></code>: Represents a single word with optional attributes</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Phoneme</span></code>: Represents a single phoneme with various representations (SAMPA, IPA)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MatchResult</span></code>: Contains the result of a successful rule match</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TranslationResult</span></code>: Contains the final translation result for a word</p></li>
 </ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>List of TabularRule objects</p>
-</dd>
-</dl>
-</dd></dl>
-
+</section>
+</section>
+<section id="rule-systems">
+<h2>Rule Systems<a class="headerlink" href="#rule-systems" title="Link to this heading"></a></h2>
+<p>LAPA-NG supports two complementary rule systems for phonetic transcription:</p>
+<section id="table-rules">
+<h3>Table Rules<a class="headerlink" href="#table-rules" title="Link to this heading"></a></h3>
+<p>The table rules system provides a user-friendly way to define phonetic transcription rules using tabular data (e.g., Excel spreadsheets). This system is designed to be more accessible to linguists and phoneticians who may not be familiar with regular expressions.</p>
+<p>Key Components:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TabularRule</span></code>: Represents a single rule from a tabular data source
+- <code class="docutils literal notranslate"><span class="pre">rule_id</span></code>: Unique identifier for the rule
+- <code class="docutils literal notranslate"><span class="pre">rule_class</span></code>: Type of rule (VOWEL, CONSONANT, or PREFIX)
+- <code class="docutils literal notranslate"><span class="pre">letter</span></code>: Initial letter that the rule applies to
+- <code class="docutils literal notranslate"><span class="pre">priority</span></code>: Priority value for rule ordering
+- <code class="docutils literal notranslate"><span class="pre">description</span></code>: Human-readable description of the rule
+- <code class="docutils literal notranslate"><span class="pre">rule</span></code>: The rule pattern or definition
+- <code class="docutils literal notranslate"><span class="pre">replaced</span></code>: Letter sequence to be replaced
+- <code class="docutils literal notranslate"><span class="pre">replaceby</span></code>: Replacement letter sequence</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RuleClass</span></code>: Enumeration of rule types
+- <code class="docutils literal notranslate"><span class="pre">VOWEL</span></code>: Rules for vowel sounds
+- <code class="docutils literal notranslate"><span class="pre">CONSONANT</span></code>: Rules for consonant sounds
+- <code class="docutils literal notranslate"><span class="pre">PREFIX</span></code>: Rules for prefix patterns</p></li>
+</ul>
+<p>The table rules system provides utilities for:
+- Loading rules from tabular data sources
+- Converting tabular rules to regex specifications
+- Sorting rules by priority
+- Checking for duplicate priorities
+- Creating matchers from tabular rules</p>
 </section>
 <section id="regex-rules">
 <h3>Regex Rules<a class="headerlink" href="#regex-rules" title="Link to this heading"></a></h3>
-<p>Rules can be defined using regular expressions for flexible pattern matching, with support for character classes and YAML-based rule specifications.</p>
-<p id="module-lapa_ng.rules_regex.rules">Regular expression based rule specifications.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="lapa_ng.rules_regex.rules.RegexRuleSpec">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lapa_ng.rules_regex.rules.</span></span><span class="sig-name descname"><span class="pre">RegexRuleSpec</span></span><a class="headerlink" href="#lapa_ng.rules_regex.rules.RegexRuleSpec" title="Link to this definition"></a></dt>
-<dd><p>Specification for a regular expression based rule.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> (<em>str</em>) – Unique identifier for the rule</p></li>
-<li><p><strong>pattern</strong> (<em>re.Pattern</em>) – Compiled regular expression pattern</p></li>
-<li><p><strong>replacement</strong> (<em>str</em>) – Phonetic replacement string</p></li>
-<li><p><strong>meta</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Additional metadata about the rule</p></li>
+<p>The regex rules system provides a more powerful and flexible way to define phonetic transcription rules using regular expressions. This system is used internally to implement the actual matching logic.</p>
+<p>Key Components:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">RegexRuleSpec</span></code>: Specification for a regular expression based rule
+- <code class="docutils literal notranslate"><span class="pre">id</span></code>: Unique identifier for the rule
+- <code class="docutils literal notranslate"><span class="pre">pattern</span></code>: Compiled regular expression pattern
+- <code class="docutils literal notranslate"><span class="pre">replacement</span></code>: Phonetic replacement string
+- <code class="docutils literal notranslate"><span class="pre">meta</span></code>: Additional metadata about the rule</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RegexMatcher</span></code>: A matcher that uses regular expressions for pattern matching
+- Optimized for prefix rules and match group extraction
+- Supports character classes for common patterns
+- Includes caching for improved performance</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RegexListMatcher</span></code>: An optimized list matcher for regex-based rules
+- Uses caching and filtering based on the first letter
+- Reduces the number of rules that need to be attempted
+- Maintains rule ordering and priority</p></li>
 </ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="lapa_ng.rules_regex.rules.RegexMatcher">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lapa_ng.rules_regex.rules.</span></span><span class="sig-name descname"><span class="pre">RegexMatcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Matcher</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lapa_ng.rules_regex.rules.RegexMatcher" title="Link to this definition"></a></dt>
-<dd><p>A matcher that uses regular expressions for pattern matching.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> (<em>str</em>) – Unique identifier for the matcher</p></li>
-<li><p><strong>rule</strong> (<em>str</em>) – Regular expression pattern</p></li>
-<li><p><strong>replacement</strong> (<em>str</em>) – Phonetic replacement string</p></li>
-<li><p><strong>meta</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Optional metadata about the rule</p></li>
-</ul>
-</dd>
-</dl>
-<p>The matcher supports the following character classes:
-- <code class="docutils literal notranslate"><span class="pre">[:vowel:]</span></code> - Matches any vowel (aeiouy)
-- <code class="docutils literal notranslate"><span class="pre">[:consonant:]</span></code> - Matches any consonant (bcdfghjklmnpqrstvwxz)
-- <code class="docutils literal notranslate"><span class="pre">[:digit:]</span></code> - Matches any digit (0123456789)
-- <code class="docutils literal notranslate"><span class="pre">[:punctuation:]</span></code> - Matches punctuation (.,!?:;)</p>
-<p>Rules starting with <code class="docutils literal notranslate"><span class="pre">^</span></code> are treated as prefix rules and only match at the start of words.
-Rules must contain a capturing group <code class="docutils literal notranslate"><span class="pre">(pattern)</span></code> to specify which part of the match to replace.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="lapa_ng.rules_regex.rules.load_matchers">
-<span class="sig-prename descclassname"><span class="pre">lapa_ng.rules_regex.rules.</span></span><span class="sig-name descname"><span class="pre">load_matchers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rule_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#lapa_ng.rules_regex.rules.RegexMatcher" title="lapa_ng.rules_regex.rules.RegexMatcher"><span class="pre">RegexMatcher</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#lapa_ng.rules_regex.rules.load_matchers" title="Link to this definition"></a></dt>
-<dd><p>Load regex matchers from a YAML file containing rule specifications.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>rule_file</strong> – Path to YAML file containing rule specifications</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Tuple of RegexMatcher objects</p>
-</dd>
-</dl>
-<p>Example YAML format:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;rule1&quot;</span>
-<span class="w">  </span><span class="nt">pattern</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;^([:vowel:]+)&quot;</span>
-<span class="w">  </span><span class="nt">replacement</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;V&quot;</span>
-<span class="w">  </span><span class="nt">meta</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Match</span><span class="nv"> </span><span class="s">initial</span><span class="nv"> </span><span class="s">vowels&quot;</span>
+<p>The regex rules system provides functions for:
+- Loading rule specifications from YAML files
+- Creating matchers from rule specifications
+- Optimizing rule matching performance</p>
+</section>
+</section>
+<section id="command-line-interface">
+<h2>Command-Line Interface<a class="headerlink" href="#command-line-interface" title="Link to this heading"></a></h2>
+<p>LAPA-NG provides a command-line interface for common operations:</p>
+<section id="converting-rules">
+<h3>Converting Rules<a class="headerlink" href="#converting-rules" title="Link to this heading"></a></h3>
+<p>Convert Excel-based rules to YAML format:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>lapa<span class="w"> </span>convert-excel<span class="w"> </span>rules.xlsx<span class="w"> </span>rules.yaml
+<span class="c1"># Optional: specify a particular sheet</span>
+lapa<span class="w"> </span>convert-excel<span class="w"> </span>rules.xlsx<span class="w"> </span>rules.yaml<span class="w"> </span>--sheet<span class="w"> </span><span class="s2">&quot;RULES&quot;</span>
 </pre></div>
 </div>
-</dd></dl>
-
+<p>This command reads rules from an Excel file and converts them to YAML format,
+which can be used directly with the regex rules system.</p>
 </section>
-</section>
-<section id="text-processing">
-<h2>Text Processing<a class="headerlink" href="#text-processing" title="Link to this heading"></a></h2>
-<section id="naf-processing">
-<h3>NAF Processing<a class="headerlink" href="#naf-processing" title="Link to this heading"></a></h3>
-<p>Text can be read from NAF (NLP Annotation Format) XML files using a streaming parser.</p>
-<p id="module-lapa_ng.naf">NAF file processing functionality.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="lapa_ng.naf.WordForm">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lapa_ng.naf.</span></span><span class="sig-name descname"><span class="pre">WordForm</span></span><a class="reference internal" href="_modules/lapa_ng/naf.html#WordForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lapa_ng.naf.WordForm" title="Link to this definition"></a></dt>
-<dd><p>Represents a word form element from a NAF file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>text</strong> (<em>str</em>) – The text content of the word form</p></li>
-<li><p><strong>attributes</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em>) – Dictionary of XML attributes associated with the word form</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="lapa_ng.naf.parse_naf">
-<span class="sig-prename descclassname"><span class="pre">lapa_ng.naf.</span></span><span class="sig-name descname"><span class="pre">parse_naf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">naf_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Generator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#lapa_ng.naf.WordForm" title="lapa_ng.naf.WordForm"><span class="pre">WordForm</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/lapa_ng/naf.html#parse_naf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lapa_ng.naf.parse_naf" title="Link to this definition"></a></dt>
-<dd><p>Parse a NAF file and yield WordForm objects.</p>
-<p>This function uses a streaming XML parser to efficiently process large NAF files.
-It yields WordForm objects for each word form element found in the text section.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>naf_file</strong> – Path to the NAF file to parse</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Generator yielding WordForm objects</p>
-</dd>
-</dl>
-<p>Example Usage:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">lapa_ng.naf</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_naf</span>
-
-<span class="c1"># Process a NAF file efficiently</span>
-<span class="k">for</span> <span class="n">word_form</span> <span class="ow">in</span> <span class="n">parse_naf</span><span class="p">(</span><span class="s2">&quot;example.naf&quot;</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Text: </span><span class="si">{</span><span class="n">word_form</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Attributes: </span><span class="si">{</span><span class="n">word_form</span><span class="o">.</span><span class="n">attributes</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<section id="transcribing-text">
+<h3>Transcribing Text<a class="headerlink" href="#transcribing-text" title="Link to this heading"></a></h3>
+<p>Transcribe words from the command line:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>lapa<span class="w"> </span>translate-words<span class="w"> </span>rules.xlsx<span class="w"> </span>word1<span class="w"> </span>word2<span class="w"> </span>word3
+<span class="c1"># Optional: specify a particular sheet</span>
+lapa<span class="w"> </span>translate-words<span class="w"> </span>rules.xlsx<span class="w"> </span>word1<span class="w"> </span>word2<span class="w"> </span>word3<span class="w"> </span>--sheet<span class="w"> </span><span class="s2">&quot;RULES&quot;</span>
 </pre></div>
 </div>
-</dd></dl>
-
+<p>This command transcribes one or more words using the specified rules and outputs
+the phonetic transcription in SAMPA format.</p>
 </section>
-<section id="text-cleaning">
-<h3>Text Cleaning<a class="headerlink" href="#text-cleaning" title="Link to this heading"></a></h3>
-<p>Text can be cleaned prior to phonetic transcription using a configurable pipeline.</p>
-<p id="module-lapa_ng.pipeline.clean">Text cleaning pipeline functionality.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="lapa_ng.pipeline.clean.create_pipeline">
-<span class="sig-prename descclassname"><span class="pre">lapa_ng.pipeline.clean.</span></span><span class="sig-name descname"><span class="pre">create_pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">functions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">callable</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">callable</span></span></span><a class="headerlink" href="#lapa_ng.pipeline.clean.create_pipeline" title="Link to this definition"></a></dt>
-<dd><p>Create a text cleaning pipeline from a sequence of cleaning functions.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>functions</strong> – One or more cleaning functions to apply in sequence</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Combined cleaning function</p>
-</dd>
-</dl>
-</dd></dl>
-
-<p>Available Cleaners:</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="lapa_ng.pipeline.clean.ensure_text">
-<span class="sig-prename descclassname"><span class="pre">lapa_ng.pipeline.clean.</span></span><span class="sig-name descname"><span class="pre">ensure_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/lapa_ng/pipeline/clean.html#ensure_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lapa_ng.pipeline.clean.ensure_text" title="Link to this definition"></a></dt>
-<dd><p>Ensure that the text is a string and not None. Returns an empty string if input is None.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="lapa_ng.pipeline.clean.strip_spaces">
-<span class="sig-prename descclassname"><span class="pre">lapa_ng.pipeline.clean.</span></span><span class="sig-name descname"><span class="pre">strip_spaces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/lapa_ng/pipeline/clean.html#strip_spaces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lapa_ng.pipeline.clean.strip_spaces" title="Link to this definition"></a></dt>
-<dd><p>Strip whitespace from the beginning and end of the text.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="lapa_ng.pipeline.clean.to_lowercase">
-<span class="sig-prename descclassname"><span class="pre">lapa_ng.pipeline.clean.</span></span><span class="sig-name descname"><span class="pre">to_lowercase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/lapa_ng/pipeline/clean.html#to_lowercase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lapa_ng.pipeline.clean.to_lowercase" title="Link to this definition"></a></dt>
-<dd><p>Convert the text to lowercase.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="lapa_ng.pipeline.clean.strip_accents">
-<span class="sig-prename descclassname"><span class="pre">lapa_ng.pipeline.clean.</span></span><span class="sig-name descname"><span class="pre">strip_accents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/lapa_ng/pipeline/clean.html#strip_accents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lapa_ng.pipeline.clean.strip_accents" title="Link to this definition"></a></dt>
-<dd><p>Remove diacritical marks (accents) from characters in a string.</p>
-</dd></dl>
-
-<p>Example Usage:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">lapa_ng.pipeline.clean</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">create_pipeline</span><span class="p">,</span>
-    <span class="n">ensure_text</span><span class="p">,</span>
-    <span class="n">strip_spaces</span><span class="p">,</span>
-    <span class="n">to_lowercase</span><span class="p">,</span>
-    <span class="n">strip_accents</span>
-<span class="p">)</span>
-
-<span class="c1"># Create a pipeline that:</span>
-<span class="c1"># 1. Ensures text is not None</span>
-<span class="c1"># 2. Strips whitespace</span>
-<span class="c1"># 3. Converts to lowercase</span>
-<span class="c1"># 4. Removes accents</span>
-<span class="n">cleaner</span> <span class="o">=</span> <span class="n">create_pipeline</span><span class="p">(</span>
-    <span class="n">ensure_text</span><span class="p">,</span>
-    <span class="n">strip_spaces</span><span class="p">,</span>
-    <span class="n">to_lowercase</span><span class="p">,</span>
-    <span class="n">strip_accents</span>
-<span class="p">)</span>
-
-<span class="c1"># Use the pipeline</span>
-<span class="n">cleaned_text</span> <span class="o">=</span> <span class="n">cleaner</span><span class="p">(</span><span class="s2">&quot;  Café au Lait  &quot;</span><span class="p">)</span>
-<span class="c1"># Result: &quot;cafe au lait&quot;</span>
+<section id="processing-naf-files">
+<h3>Processing NAF Files<a class="headerlink" href="#processing-naf-files" title="Link to this heading"></a></h3>
+<p>Process text from NAF (NLP Annotation Framework) files:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>lapa<span class="w"> </span>translate-naf<span class="w"> </span>input.naf<span class="w"> </span>rules.xlsx
+<span class="c1"># Optional: specify a particular sheet</span>
+lapa<span class="w"> </span>translate-naf<span class="w"> </span>input.naf<span class="w"> </span>rules.xlsx<span class="w"> </span>--sheet<span class="w"> </span><span class="s2">&quot;RULES&quot;</span>
 </pre></div>
 </div>
+<p>This command reads text from a NAF file, transcribes it using the specified rules,
+and outputs the results in CSV format with detailed information about each
+transcription, including:
+- Word ID and text
+- Position in the word
+- Matched pattern
+- Phoneme in SAMPA format
+- Rule ID used
+- Number of rules attempted</p>
 </section>
+<section id="testing">
+<h3>Testing<a class="headerlink" href="#testing" title="Link to this heading"></a></h3>
+<p>Run the test suite:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>lapa<span class="w"> </span><span class="nb">test</span>
+</pre></div>
+</div>
+<p>This command runs the test suite to verify the system is working correctly.</p>
+</section>
+</section>
+<section id="usage-example">
+<h2>Usage Example<a class="headerlink" href="#usage-example" title="Link to this heading"></a></h2>
+<p>Here’s a complete example of how the components work together:</p>
+<ol class="arabic">
+<li><p>Define rules in an Excel spreadsheet with columns for:
+- Rule ID
+- Rule class (VOWEL, CONSONANT, PREFIX)
+- Letter
+- Priority
+- Description
+- Rule pattern
+- Replacement pattern</p></li>
+<li><p>Convert the rules to YAML format:
+.. code-block:: bash</p>
+<blockquote>
+<div><p>lapa convert-excel rules.xlsx rules.yaml</p>
+</div></blockquote>
+</li>
+<li><p>Use the rules to transcribe text:
+.. code-block:: bash</p>
+<blockquote>
+<div><p>lapa translate-words rules.xlsx “voorbeeld” “taal”
+# Output: v r o n d &#64; r b &#64; l t a l</p>
+</div></blockquote>
+</li>
+<li><p>Process a NAF file:
+.. code-block:: bash</p>
+<blockquote>
+<div><p>lapa translate-naf document.naf rules.xlsx &gt; transcriptions.csv</p>
+</div></blockquote>
+</li>
+</ol>
+<p>The system will:
+1. Load and validate the rules
+2. Convert them to an optimized regex-based format
+3. Process the input text
+4. Apply the rules in the correct order
+5. Output the phonetic transcriptions</p>
 </section>
 </section>
 

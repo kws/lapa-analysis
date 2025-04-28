@@ -6,267 +6,204 @@ This page provides detailed documentation for the LAPA-NG Python API, a system f
 Core Components
 -------------
 
-Rules and Matchers
-~~~~~~~~~~~~~~~~
+The LAPA-NG system is built around several core components that work together to perform phonetic transcription:
 
-The core of LAPA-NG is its rule-based matching system that converts written text into phonetic sounds.
+Translator
+~~~~~~~~~
 
-.. py:module:: lapa_ng.rules.matchers
+The ``Translator`` protocol defines the interface for translating words into phonemes. It provides a single method:
 
-   Core matching functionality for phonetic transcription.
+.. code-block:: python
 
-   .. py:class:: MatchResult
+    def translate(self, word: WordOrWordList, *, emit: EmitValue | None) -> Generator[TranslationResult, None, None]
 
-      Result of a successful rule match.
+The translator can process either a single word or a list of words, and can emit results at different granularities (word, rule, or phoneme level).
 
-      :param str word: Original word being matched
-      :param int start: Starting position of the match
-      :param str matched: The substring that was matched
-      :param str phonemes: Phonetic transcription for the matched substring
-      :param str remainder: Remaining part of the word after the match
+Matcher
+~~~~~~~
 
-   .. py:class:: ContextualMatchResult
+The ``Matcher`` protocol defines how to match substrings of words against rules and return corresponding phonetic transcriptions:
 
-      Enhanced match result including rule information.
+.. code-block:: python
 
-      :param MatchResult match_result: The basic match result
-      :param str rule_id: Identifier of the rule that matched
-      :param tuple[str, ...] rules_attempted: Tuple of rule IDs that were attempted before finding a match
+    def match(self, word: Word, start: int) -> Generator[MatchResult, None, None]
 
-   .. py:class:: Matcher(Protocol)
+Implementations
+~~~~~~~~~~~~~
 
-      Protocol defining the interface for rule matchers.
+The system provides several concrete implementations:
 
-      .. py:method:: match(word: str, start: int) -> MatchResult | None
+- ``MatchingTranslator``: A translator that uses a matcher to translate words into phonemes
+- ``CachedTranslator``: A translator wrapper that caches results to improve performance
 
-         Match a substring of a word against a specific rule.
+Data Types
+~~~~~~~~~
 
-         :param str word: The word to match against
-         :param int start: Starting position in the word
-         :return: MatchResult if successful, None otherwise
+The system uses several key data types:
 
-      .. py:property:: id -> str
+- ``Word``: Represents a single word with optional attributes
+- ``Phoneme``: Represents a single phoneme with various representations (SAMPA, IPA)
+- ``MatchResult``: Contains the result of a successful rule match
+- ``TranslationResult``: Contains the final translation result for a word
 
-         Return the unique identifier for this matcher.
+Rule Systems
+-----------
 
-   .. py:class:: RuleListMatcher(Matcher)
+LAPA-NG supports two complementary rule systems for phonetic transcription:
 
-      A matcher that attempts to match a word against a list of rules in sequence.
-
-      :param list[Matcher] rules: List of matchers to try in sequence
-
-   .. py:function:: translate(word: str, part_matcher: Matcher) -> Generator[ContextualMatchResult, None, None]
-
-      Translate a word into phonemes using the given matcher.
-
-      This function attempts to match the entire word against the rules and yields
-      a ContextualMatchResult for each match found. If no rule matches a character,
-      it yields a 'silent' match with empty phonemes.
-
-      :param str word: The word to translate
-      :param Matcher part_matcher: The matcher to use for rule matching
-      :return: Generator yielding ContextualMatchResult for each match or non-match
-
-   .. py:class:: CachedTranslator
-
-      A translator that caches results to improve performance.
-
-      :param callable translate_func: The function to use for translation
-      :param int cache_size: Maximum number of translations to cache (default: 10,000)
-
-      .. py:method:: translate(word: str, translator: Matcher) -> Generator[ContextualMatchResult, None, None]
-
-         Translate a word using the cached translator.
-
-         :param str word: The word to translate
-         :param Matcher translator: The matcher to use for rule matching
-         :return: Generator yielding ContextualMatchResult for each match
-
-      .. py:method:: __call__(word: str, translator: Matcher) -> Generator[ContextualMatchResult, None, None]
-
-         Allow the translator to be called as a function.
-
-         :param str word: The word to translate
-         :param Matcher translator: The matcher to use for rule matching
-         :return: Generator yielding ContextualMatchResult for each match
-
-Rule Tables
+Table Rules
 ~~~~~~~~~~
 
-Rules can be loaded from Excel spreadsheets or CSV files.
+The table rules system provides a user-friendly way to define phonetic transcription rules using tabular data (e.g., Excel spreadsheets). This system is designed to be more accessible to linguists and phoneticians who may not be familiar with regular expressions.
 
-.. py:module:: lapa_ng.rules_table.table
+Key Components:
 
-   Table-based rule processing functionality.
+- ``TabularRule``: Represents a single rule from a tabular data source
+  - ``rule_id``: Unique identifier for the rule
+  - ``rule_class``: Type of rule (VOWEL, CONSONANT, or PREFIX)
+  - ``letter``: Initial letter that the rule applies to
+  - ``priority``: Priority value for rule ordering
+  - ``description``: Human-readable description of the rule
+  - ``rule``: The rule pattern or definition
+  - ``replaced``: Letter sequence to be replaced
+  - ``replaceby``: Replacement letter sequence
 
-   .. py:function:: read_excel(file_path: str | Path, sheet_name: str | int | None = None) -> list[TabularRule]
+- ``RuleClass``: Enumeration of rule types
+  - ``VOWEL``: Rules for vowel sounds
+  - ``CONSONANT``: Rules for consonant sounds
+  - ``PREFIX``: Rules for prefix patterns
 
-      Read rules from an Excel file.
-
-      :param file_path: Path to Excel file
-      :param sheet_name: Name or index of sheet to read
-      :return: List of TabularRule objects
-
-   .. py:function:: read_csv(file_path: str | Path, field_separator: str = ',', skiprows: int = 0) -> list[TabularRule]
-
-      Read rules from a CSV file.
-
-      :param file_path: Path to CSV file
-      :param field_separator: Character used to separate fields
-      :param skiprows: Number of rows to skip at the start
-      :return: List of TabularRule objects
+The table rules system provides utilities for:
+- Loading rules from tabular data sources
+- Converting tabular rules to regex specifications
+- Sorting rules by priority
+- Checking for duplicate priorities
+- Creating matchers from tabular rules
 
 Regex Rules
 ~~~~~~~~~~
 
-Rules can be defined using regular expressions for flexible pattern matching, with support for character classes and YAML-based rule specifications.
+The regex rules system provides a more powerful and flexible way to define phonetic transcription rules using regular expressions. This system is used internally to implement the actual matching logic.
 
-.. py:module:: lapa_ng.rules_regex.rules
+Key Components:
 
-   Regular expression based rule specifications.
+- ``RegexRuleSpec``: Specification for a regular expression based rule
+  - ``id``: Unique identifier for the rule
+  - ``pattern``: Compiled regular expression pattern
+  - ``replacement``: Phonetic replacement string
+  - ``meta``: Additional metadata about the rule
 
-   .. py:class:: RegexRuleSpec
+- ``RegexMatcher``: A matcher that uses regular expressions for pattern matching
+  - Optimized for prefix rules and match group extraction
+  - Supports character classes for common patterns
+  - Includes caching for improved performance
 
-      Specification for a regular expression based rule.
+- ``RegexListMatcher``: An optimized list matcher for regex-based rules
+  - Uses caching and filtering based on the first letter
+  - Reduces the number of rules that need to be attempted
+  - Maintains rule ordering and priority
 
-      :param str id: Unique identifier for the rule
-      :param re.Pattern pattern: Compiled regular expression pattern
-      :param str replacement: Phonetic replacement string
-      :param dict[str, Any] meta: Additional metadata about the rule
+The regex rules system provides functions for:
+- Loading rule specifications from YAML files
+- Creating matchers from rule specifications
+- Optimizing rule matching performance
 
-   .. py:class:: RegexMatcher(Matcher)
+Command-Line Interface
+--------------------
 
-      A matcher that uses regular expressions for pattern matching.
+LAPA-NG provides a command-line interface for common operations:
 
-      :param str id: Unique identifier for the matcher
-      :param str rule: Regular expression pattern
-      :param str replacement: Phonetic replacement string
-      :param dict[str, Any] meta: Optional metadata about the rule
+Converting Rules
+~~~~~~~~~~~~~~
 
-      The matcher supports the following character classes:
-      - ``[:vowel:]`` - Matches any vowel (aeiouy)
-      - ``[:consonant:]`` - Matches any consonant (bcdfghjklmnpqrstvwxz)
-      - ``[:digit:]`` - Matches any digit (0123456789)
-      - ``[:punctuation:]`` - Matches punctuation (.,!?:;)
+Convert Excel-based rules to YAML format:
 
-      Rules starting with ``^`` are treated as prefix rules and only match at the start of words.
-      Rules must contain a capturing group ``(pattern)`` to specify which part of the match to replace.
+.. code-block:: bash
 
-   .. py:function:: load_matchers(rule_file: str | Path) -> tuple[RegexMatcher, ...]
+    lapa convert-excel rules.xlsx rules.yaml
+    # Optional: specify a particular sheet
+    lapa convert-excel rules.xlsx rules.yaml --sheet "RULES"
 
-      Load regex matchers from a YAML file containing rule specifications.
+This command reads rules from an Excel file and converts them to YAML format,
+which can be used directly with the regex rules system.
 
-      :param rule_file: Path to YAML file containing rule specifications
-      :return: Tuple of RegexMatcher objects
+Transcribing Text
+~~~~~~~~~~~~~~~
 
-      Example YAML format:
+Transcribe words from the command line:
 
-      .. code-block:: yaml
+.. code-block:: bash
 
-         - id: "rule1"
-           pattern: "^([:vowel:]+)"
-           replacement: "V"
-           meta:
-             description: "Match initial vowels"
+    lapa translate-words rules.xlsx word1 word2 word3
+    # Optional: specify a particular sheet
+    lapa translate-words rules.xlsx word1 word2 word3 --sheet "RULES"
 
-Text Processing
--------------
+This command transcribes one or more words using the specified rules and outputs
+the phonetic transcription in SAMPA format.
 
-NAF Processing
-~~~~~~~~~~~~~
+Processing NAF Files
+~~~~~~~~~~~~~~~~~~
 
-Text can be read from NAF (NLP Annotation Format) XML files using a streaming parser.
+Process text from NAF (NLP Annotation Framework) files:
 
-.. py:module:: lapa_ng.naf
+.. code-block:: bash
 
-   NAF file processing functionality.
+    lapa translate-naf input.naf rules.xlsx
+    # Optional: specify a particular sheet
+    lapa translate-naf input.naf rules.xlsx --sheet "RULES"
 
-   .. py:class:: WordForm
+This command reads text from a NAF file, transcribes it using the specified rules,
+and outputs the results in CSV format with detailed information about each
+transcription, including:
+- Word ID and text
+- Position in the word
+- Matched pattern
+- Phoneme in SAMPA format
+- Rule ID used
+- Number of rules attempted
 
-      Represents a word form element from a NAF file.
+Testing
+~~~~~~~
 
-      :param str text: The text content of the word form
-      :param dict[str, str] attributes: Dictionary of XML attributes associated with the word form
+Run the test suite:
 
-   .. py:function:: parse_naf(naf_file: str) -> Generator[WordForm, None, None]
+.. code-block:: bash
 
-      Parse a NAF file and yield WordForm objects.
+    lapa test
 
-      This function uses a streaming XML parser to efficiently process large NAF files.
-      It yields WordForm objects for each word form element found in the text section.
+This command runs the test suite to verify the system is working correctly.
 
-      :param naf_file: Path to the NAF file to parse
-      :return: Generator yielding WordForm objects
+Usage Example
+------------
 
-      Example Usage:
+Here's a complete example of how the components work together:
 
-      .. code-block:: python
+1. Define rules in an Excel spreadsheet with columns for:
+   - Rule ID
+   - Rule class (VOWEL, CONSONANT, PREFIX)
+   - Letter
+   - Priority
+   - Description
+   - Rule pattern
+   - Replacement pattern
 
-         from lapa_ng.naf import parse_naf
+2. Convert the rules to YAML format:
+   .. code-block:: bash
+      lapa convert-excel rules.xlsx rules.yaml
 
-         # Process a NAF file efficiently
-         for word_form in parse_naf("example.naf"):
-             print(f"Text: {word_form.text}")
-             print(f"Attributes: {word_form.attributes}")
+3. Use the rules to transcribe text:
+   .. code-block:: bash
+      lapa translate-words rules.xlsx "voorbeeld" "taal"
+      # Output: v r o n d @ r b @ l t a l
 
-Text Cleaning
-~~~~~~~~~~~~
+4. Process a NAF file:
+   .. code-block:: bash
+      lapa translate-naf document.naf rules.xlsx > transcriptions.csv
 
-Text can be cleaned prior to phonetic transcription using a configurable pipeline.
+The system will:
+1. Load and validate the rules
+2. Convert them to an optimized regex-based format
+3. Process the input text
+4. Apply the rules in the correct order
+5. Output the phonetic transcriptions
 
-.. py:module:: lapa_ng.pipeline.clean
-
-   Text cleaning pipeline functionality.
-
-   .. py:function:: create_pipeline(*functions: callable) -> callable
-
-      Create a text cleaning pipeline from a sequence of cleaning functions.
-
-      :param functions: One or more cleaning functions to apply in sequence
-      :return: Combined cleaning function
-
-   Available Cleaners:
-
-   .. py:function:: ensure_text(text: str | None) -> str
-
-      Ensure that the text is a string and not None. Returns an empty string if input is None.
-
-   .. py:function:: strip_spaces(text: str) -> str
-
-      Strip whitespace from the beginning and end of the text.
-
-   .. py:function:: to_lowercase(text: str) -> str
-
-      Convert the text to lowercase.
-
-   .. py:function:: strip_accents(text: str) -> str
-
-      Remove diacritical marks (accents) from characters in a string.
-
-   Example Usage:
-
-   .. code-block:: python
-
-      from lapa_ng.pipeline.clean import (
-          create_pipeline,
-          ensure_text,
-          strip_spaces,
-          to_lowercase,
-          strip_accents
-      )
-
-      # Create a pipeline that:
-      # 1. Ensures text is not None
-      # 2. Strips whitespace
-      # 3. Converts to lowercase
-      # 4. Removes accents
-      cleaner = create_pipeline(
-          ensure_text,
-          strip_spaces,
-          to_lowercase,
-          strip_accents
-      )
-
-      # Use the pipeline
-      cleaned_text = cleaner("  Café au Lait  ")
-      # Result: "cafe au lait" 
