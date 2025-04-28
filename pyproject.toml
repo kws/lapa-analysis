@@ -19,8 +19,6 @@ dependencies = [
     "pandas (>=2.2.3,<3.0.0)",
     "cachetools (>=5.5.2,<6.0.0)",
     "pyyaml (>=6.0.2,<7.0.0)",
-    "jupyter (>=1.1.1,<2.0.0)",
-    "plotly (>=6.0.1,<7.0.0)"
 ]
 
 [tool.poetry]
@@ -32,6 +30,18 @@ packages = [
 [project.scripts]
 lapa-ng = "lapa_ng._cli:cli"
 
+[tool.poetry.group.dev.dependencies]
+black = "^25.1.0"
+isort = "^6.0.1"
+pytest = "^8.3.5"
+sphinx = "^7.2.6"
+sphinx-rtd-theme = "^2.0.0"
+coverage = "^7.8.0"
+
+[tool.poetry.group.jupyter.dependencies]
+jupyter = "^1.1.1"
+plotly = "^6.0.1"
+
 [tool.poetry.requires-plugins]
 poetry-plugin-export = ">=1.8"
 poetry-plugin-shell = ">=1.0"
@@ -40,11 +50,7 @@ poetry-plugin-shell = ">=1.0"
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.poetry.group.dev.dependencies]
-black = "^25.1.0"
-isort = "^6.0.1"
-pytest = "^8.3.5"
-sphinx = "^7.2.6"
-sphinx-rtd-theme = "^2.0.0"
-coverage = "^7.8.0"
+
+
+
 
