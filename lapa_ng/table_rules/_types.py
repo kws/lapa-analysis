@@ -1,34 +1,28 @@
-"""
-Data structures for tabular rule processing.
-
-This module defines the core data structures used for representing
-and processing rules from tabular data sources.
-"""
-
-from enum import Enum
 from dataclasses import dataclass
-from pathlib import Path
+from enum import Enum
+
 
 class RuleClass(Enum):
     """Enumeration of possible rule classes.
-    
+
     This enum defines the different types of rules that can be processed:
     - VOWEL: Rules for vowel sounds
     - CONSONANT: Rules for consonant sounds
     - PREFIX: Rules for prefix patterns
     """
-    VOWEL = 'V'
-    CONSONANT = 'C'
-    PREFIX = 'P'
+
+    VOWEL = "V"
+    CONSONANT = "C"
+    PREFIX = "P"
 
 
 @dataclass
 class TabularRule:
     """Represents a rule from a tabular data source.
-    
+
     This class encapsulates all the information needed to define a phonetic
     transcription rule, including its type, priority, and transformation details.
-    
+
     Attributes:
         rule_id: Unique identifier for the rule
         rule_class: Type of rule (VOWEL, CONSONANT, or PREFIX)
@@ -40,6 +34,7 @@ class TabularRule:
         replaced: Letter sequence to be replaced
         replaceby: Replacement letter sequence
     """
+
     rule_id: str
     rule_class: RuleClass
     letter: str

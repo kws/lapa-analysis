@@ -54,10 +54,7 @@ poetry run python -m lapa_classic --help
 ├── lapa_classic/         # Core business logic for parsing and processing
 │   ├── counter.py        # Classes to count emotions and sampa characters
 │   ├── sampify.py        # Classes to parse and load the sampa transliteration dictionary
-│   ├── naf.py            # Classes to parse the naf xml file
-│   ├── _cli.py           # Command-line interface
-│   ├── __init__.py       # Package initialization
-│   └── __main__.py       # Package entry point
+│   └── naf.py            # Classes to parse the naf xml file
 │
 ├── tests/                # Test suite
 │   └── test_classic.py   # Tests for lapa_classic functionality
