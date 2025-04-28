@@ -161,7 +161,7 @@ def table_rule_to_regex_spec(
 
     # Replace the replaced phoneme with a capturing group
     replaced = rule.replaced
-    match = re.match(f"^(\^?)({replaced})", pattern)
+    match = re.match(rf"^(\^?)({re.escape(replaced)})", pattern)
 
     if match is None:
         logger.warning(
