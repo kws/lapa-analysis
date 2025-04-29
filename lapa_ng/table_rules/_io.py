@@ -120,7 +120,14 @@ def read_excel(
             f"Multiple sheets found in the Excel file. Please specify the sheet name or index from: {', '.join(df.keys())}"
         )
 
-    file_name = Path(file_path).name
+    try:
+        if hasattr(file_path, "name"):
+            file_name = file_path.name
+        else:
+            file_name = Path(file_path).name
+    except Exception as e:
+        file_name = str(file_path)
+
     if sheet_name:
         file_name = f"{file_name}:{sheet_name}"
     return list(dataframe_to_rules(df, file_id=file_name, start_ix=2))

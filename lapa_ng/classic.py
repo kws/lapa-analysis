@@ -44,7 +44,9 @@ class RuleId:
         self.first_letter = expression[0].lower()
 
 
-def excel_to_rules(input_file: str, sheet_name: str | None = None) -> dict:
+def excel_to_rules(
+    input_file: str, sheet_name: str | None = None, use_mmap: bool = False
+) -> dict:
     """
     Read an Excel file and convert it to a dictionary of rules.
 
@@ -52,7 +54,8 @@ def excel_to_rules(input_file: str, sheet_name: str | None = None) -> dict:
     """
     file_id = Path(input_file).name
 
-    wb = xlrd.open_workbook(input_file)
+    wb = xlrd.open_workbook(input_file, use_mmap=use_mmap)
+
     sheet_names = wb.sheet_names()
     if sheet_name:
         file_id = f"{file_id}:{sheet_name}"
